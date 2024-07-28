@@ -2,17 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface Event {
+  user: string;
+  date: string;
+  shift: string;
+  start_time: string;
+  end_time: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PlanService {
+  private apiUrl = "http://127.0.0.1:8000/planner";
 
-  private apiUrl = "http://127.0.0.1:8000/planner/";
+  constructor(private http: HttpClient) {}
 
-  constructor( private http: HttpClient) { }
-
-  getEvents(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/events/`)
+  getEvents(): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.apiUrl}/events/`);
   }
-
 }

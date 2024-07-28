@@ -1,1 +1,12 @@
-<p>plan works!</p>
+<div>
+  <h1>Event List</h1>
+  <ul>
+    <li *ngFor="let event of events">
+      <strong>User:</strong> {{ event.user }}<br>
+      <strong>Date:</strong> {{ event.date }}<br>
+      <strong>Shift:</strong> {{ event.shift }}<br>
+      <strong>Start Time:</strong> {{ event.start_time }}<br>
+      <strong>End Time:</strong> {{ event.end_time }}<br>
+    </li>
+  </ul>
+</div>
