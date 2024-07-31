@@ -6,7 +6,15 @@ import { User } from './users.service';
 export interface Event {
   user: User;
   date: string;
-  shift: string;
+  shift_name: string;
+  start_time: string;
+  end_time: string;
+}
+
+export interface Shift {
+  users: User;
+  name: string;
+  description: string;
   start_time: string;
   end_time: string;
 }
@@ -21,5 +29,9 @@ export class PlanService {
 
   getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.apiUrl}/events/`);
+  }
+
+  getShifts(): Observable<Shift[]> {
+    return this.http.get<Shift[]>(`${this.apiUrl}/shifts/`);
   }
 }
