@@ -20,3 +20,6 @@
   text-align: center; 
   font-size: 25px;
 }
+.event-details{
+  transform: rotate(70deg); 
+}

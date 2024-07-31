@@ -3,13 +3,25 @@
     <div class="event" *ngFor="let date of dates">
       <div class="date">{{ date.format('DD MMM YYYY') }}</div>
       <div class="event-details" *ngFor="let event of getEventsForDate(date)">
-        <strong>User:</strong> {{ event.user }}<br>
+        <strong>User:</strong> {{ event.user.first_name }} {{ event.user.last_name }}<br>
         <strong>Shift:</strong> {{ event.shift }}<br>
         <strong>Start Time:</strong> {{ event.start_time }}<br>
         <strong>End Time:</strong> {{ event.end_time }}<br>
       </div>
     </div>
   </div>
+</div>
+
+<div>
+  <h1>User List</h1>
+  <ul>
+    <li *ngFor="let user of users">
+      <strong>Username:</strong> {{ user.username }}<br>
+      <strong>First Name:</strong> {{ user.first_name }}<br>
+      <strong>Last Name:</strong> {{ user.last_name }}<br>
+      <strong>Email:</strong> {{ user.email }}<br>
+    </li>
+  </ul>
 </div>
 
 <div class="controls">

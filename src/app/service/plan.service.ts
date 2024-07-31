@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from './users.service';
 
 export interface Event {
-  user: string;
+  user: User;
   date: string;
   shift: string;
   start_time: string;

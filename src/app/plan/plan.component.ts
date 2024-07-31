@@ -4,6 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/pl';
 import { PlanService, Event } from '../service/plan.service';
+import { UsersService, User } from '../service/users.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -18,14 +19,15 @@ dayjs.locale('pl');
   imports: [CommonModule, HttpClientModule, RouterModule],
   templateUrl: './plan.component.html',
   styleUrls: ['./plan.component.css'],
-  providers: [PlanService]
+  providers: [PlanService, UsersService]
 })
 export class PlanComponent implements OnInit {
   events: Event[] = [];
   dates: Dayjs[] = [];
   currentMonth: Dayjs;
+  users: User[] = [];
 
-  constructor(private planService: PlanService) {
+  constructor(private planService: PlanService, private usersService: UsersService) {
     this.currentMonth = dayjs().tz('Europe/Warsaw').startOf('month');
   }
 
@@ -33,6 +35,9 @@ export class PlanComponent implements OnInit {
     this.planService.getEvents().subscribe((data: Event[]) => {
       this.events = data;
       this.generateDatesForCurrentMonth();
+    });
+    this.usersService.getUsers().subscribe((data: User[]) => {
+      this.users = data;
     });
   }
 
