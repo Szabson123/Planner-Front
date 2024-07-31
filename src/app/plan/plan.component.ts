@@ -1,8 +1,9 @@
+import { Component, OnInit } from '@angular/core';
+import dayjs, { Dayjs } from 'dayjs';
+import { PlanService, Event } from '../service/plan.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { PlanService, Event } from '../service/plan.service';
 
 @Component({
   selector: 'app-plan',
@@ -14,6 +15,7 @@ import { PlanService, Event } from '../service/plan.service';
 })
 export class PlanComponent implements OnInit {
   events: Event[] = [];
+  dates: Dayjs[] = [];
 
   constructor(private planService: PlanService) {}
 
@@ -21,5 +23,21 @@ export class PlanComponent implements OnInit {
     this.planService.getEvents().subscribe((data: Event[]) => {
       this.events = data;
     });
+    this.generateDatesForCurrentMonth();
+  }
+
+  generateDatesForCurrentMonth() {
+    const startOfMonth = dayjs().startOf('month');
+    const endOfMonth = dayjs().endOf('month');
+    const dates: Dayjs[] = [];
+
+    let currentDate = startOfMonth;
+
+    while (currentDate.isBefore(endOfMonth) || currentDate.isSame(endOfMonth, 'day')) {
+      dates.push(currentDate);
+      currentDate = currentDate.add(1, 'day');
+    }
+
+    this.dates = dates;
   }
 }

@@ -1,3 +1,10 @@
+<div class="timeline-container">
+  <div class="timeline">
+    <div class="event" *ngFor="let date of dates">
+      <div class="date">{{ date.format('DD MMM YYYY') }}</div>
+    </div>
+  </div>
+</div>
 <div>
   <h1>Event List</h1>
   <ul>

@@ -1,0 +1,22 @@
+.timeline-container {
+  white-space: nowrap; 
+}
+
+.timeline {
+  display: flex; 
+  flex-direction: row; 
+}
+
+.event {
+  margin-top: 100px;
+  display: inline-block; 
+  transform: rotate(-70deg); 
+  margin-bottom: 50px;
+  margin-right: -60px; /* Zmniejsz odstęp między elementami */
+}
+
+.date {
+  display: inline-block; 
+  text-align: center; 
+  font-size: 25px;
+}
