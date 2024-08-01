@@ -105,6 +105,17 @@ export class PlanComponent implements OnInit {
       }
     );
   }
+  restorePlanner() {
+    this.planService.restorePlanner().subscribe(
+      response => {
+        console.log('Planner restored successfully', response);
+        this.refreshEvents();
+      },
+      error => {
+        console.error('Error restored planner', error);
+      }
+    );
+  }
 
   refreshEvents() {
     this.planService.getEvents().subscribe((data: Event[]) => {

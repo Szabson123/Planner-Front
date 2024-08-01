@@ -48,4 +48,8 @@ export class PlanService {
   generatePlanner(): Observable<any> {
     return this.http.post(`${this.apiUrl}/generate-planner/`, {});
   }
+
+  restorePlanner(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/restore-plan/`, {});
+  }
 }
