@@ -89,4 +89,8 @@ export class PlanComponent implements OnInit {
     this.currentMonth = this.currentMonth.add(1, 'month');
     this.generateDatesForCurrentMonth();
   }
+
+  formatTime(time: string): string {
+    return time.slice(0, -3);
+  }
 }

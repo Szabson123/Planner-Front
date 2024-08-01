@@ -21,3 +21,15 @@
   font-weight: bold;
   white-space: nowrap; /* Zapobiega zawijaniu tekstu */
 }
+
+.event_name{
+  text-align: left;
+  font-weight: bold;
+  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+}
+.event_hours{
+  text-align: center;
+  color: gray;
+  white-space: nowrap;
+  font-size: small;
+}

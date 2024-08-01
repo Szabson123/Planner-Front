@@ -4,12 +4,6 @@
   <button (click)="nextMonth()">Next →</button>
 </div>
 
-<div class="controls">
-  <button (click)="previousMonth()">← Previous</button>
-  <span>{{ currentMonth.format('MMMM YYYY') }}</span>
-  <button (click)="nextMonth()">Next →</button>
-</div>
-
 <div class="timeline-container">
   <table class="timeline-table">
     <thead>
@@ -28,16 +22,14 @@
         <td *ngFor="let date of dates">
           <div *ngIf="hasFreeDay(date, user)" style="background-color:aquamarine;">Dzień wolny</div>
           <div class="event-details" *ngFor="let event of getEventsForDateAndUser(date, user)">
-            {{ event.shift_name }}
+            <div class="event_name">{{ event.shift_name }}</div>
+            <div class="event_hours">{{ formatTime(event.start_time)}} - {{formatTime(event.end_time)}}</div>
           </div>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
-
-
-
 
 <div>
   <h1>Shift List</h1>
