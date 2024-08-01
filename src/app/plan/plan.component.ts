@@ -8,7 +8,7 @@ import { UsersService, User } from '../service/users.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
+import { FormsModule } from '@angular/forms';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -17,7 +17,7 @@ dayjs.locale('pl');
 @Component({
   selector: 'app-plan',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule],
+  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule],
   templateUrl: './plan.component.html',
   styleUrls: ['./plan.component.css'],
   providers: [PlanService, UsersService]
@@ -29,6 +29,8 @@ export class PlanComponent implements OnInit {
   free_day: FreeDay[] = [];
   currentMonth: Dayjs;
   users: User[] = [];
+  filteredUsers: User[] = [];
+  selectedShift: string = '';
 
   constructor(private planService: PlanService, private usersService: UsersService) {
     this.currentMonth = dayjs().tz('Europe/Warsaw').startOf('month');
@@ -38,12 +40,14 @@ export class PlanComponent implements OnInit {
     this.planService.getEvents().subscribe((data: Event[]) => {
       this.events = data;
       this.generateDatesForCurrentMonth();
+      this.applyFilter(); 
     });
     this.planService.getShifts().subscribe((data: Shift[]) => {
       this.shifts = data;
     });
     this.usersService.getUsers().subscribe((data: User[]) => {
       this.users = data;
+      this.filteredUsers = data; 
     });
     this.planService.getFreeDays().subscribe((data: FreeDay[]) => {
       this.free_day = data;
@@ -75,7 +79,11 @@ export class PlanComponent implements OnInit {
   getEventsForDateAndUser(date: Dayjs, user: User): Event[] {
     return this.events.filter(event => dayjs(event.date).isSame(date, 'day') && event.user.id === user.id);
   }
-  
+  getFilteredEventsForDateAndUser(date: Dayjs, user: User): Event[] {
+    return this.getEventsForDateAndUser(date, user).filter(event =>
+      !this.selectedShift || event.shift_name === this.selectedShift
+    );
+  }
   hasFreeDay(date: Dayjs, user: User): boolean {
     return this.free_day.some(free_day => dayjs(free_day.date).isSame(date, 'day') && free_day.user.id === user.id);
   }
@@ -123,5 +131,15 @@ export class PlanComponent implements OnInit {
       this.generateDatesForCurrentMonth();
     });
   }
-}
+  applyFilter() {
+    if (!this.selectedShift) {
+      this.filteredUsers = this.users;
+    } else {
+      const usersWithSelectedShift = this.events
+        .filter(event => event.shift_name === this.selectedShift)
+        .map(event => event.user.id);
 
+      this.filteredUsers = this.users.filter(user => usersWithSelectedShift.includes(user.id));
+    }
+  }
+}

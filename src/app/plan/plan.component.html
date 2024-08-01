@@ -3,7 +3,6 @@
   <span>{{ currentMonth.format('MMMM YYYY') }}</span>
   <button (click)="nextMonth()">Next →</button>
 </div>
-
 <div class="timeline-container">
   <table class="timeline-table">
     <thead>
@@ -12,16 +11,22 @@
         <th *ngFor="let date of dates">{{ date.format('DD MMM YYYY') }}</th>
       </tr>
       <tr>
-        <th></th>
+        <th><div class="filter-container">
+          <label for="shiftFilter">Filter by Shift:</label>
+          <select id="shiftFilter" [(ngModel)]="selectedShift" (change)="applyFilter()">
+            <option value="">All Shifts</option>
+            <option *ngFor="let shift of shifts" [value]="shift.name">{{ shift.name }}</option>
+          </select>
+        </div></th>
         <th *ngFor="let date of dates">{{ date.format('dddd') }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of users">
+      <tr *ngFor="let user of filteredUsers">
         <td class="user-name">{{ user.first_name }} {{ user.last_name }}</td>
         <td *ngFor="let date of dates">
           <div *ngIf="hasFreeDay(date, user)" style="background-color:aquamarine;">Dzień wolny</div>
-          <div class="event-details" *ngFor="let event of getEventsForDateAndUser(date, user)">
+          <div class="event-details" *ngFor="let event of getFilteredEventsForDateAndUser(date, user)">
             <div class="event_name">{{ event.shift_name }}</div>
             <div class="event_hours">{{ formatTime(event.start_time)}} - {{formatTime(event.end_time)}}</div>
           </div>
