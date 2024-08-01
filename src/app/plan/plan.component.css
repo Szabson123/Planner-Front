@@ -1,25 +1,23 @@
 .timeline-container {
-  white-space: nowrap; 
+  overflow-x: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
 }
 
-.timeline {
-  display: flex; 
-  flex-direction: row; 
+.timeline-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.event {
-  margin-top: 100px;
-  display: inline-block; 
-  transform: rotate(-70deg); 
-  margin-bottom: 50px;
-  margin-right: -56px; /* Zmniejsz odstęp między elementami */
+.timeline-table th,
+.timeline-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
 }
 
-.date {
-  display: inline-block; 
-  text-align: center; 
-  font-size: 25px;
-}
-.event-details{
-  transform: rotate(70deg); 
+.user-name {
+  text-align: left;
+  font-weight: bold;
+  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
 }

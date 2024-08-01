@@ -3,11 +3,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/pl';
-import { PlanService, Event, Shift } from '../service/plan.service';
+import { PlanService, Event, Shift, FreeDay } from '../service/plan.service';
 import { UsersService, User } from '../service/users.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -23,8 +24,9 @@ dayjs.locale('pl');
 })
 export class PlanComponent implements OnInit {
   events: Event[] = [];
-  dates: Dayjs[] = [];
   shifts: Shift[] = [];
+  dates: Dayjs[] = [];
+  free_day: FreeDay[] = [];
   currentMonth: Dayjs;
   users: User[] = [];
 
@@ -42,6 +44,9 @@ export class PlanComponent implements OnInit {
     });
     this.usersService.getUsers().subscribe((data: User[]) => {
       this.users = data;
+    });
+    this.planService.getFreeDays().subscribe((data: FreeDay[]) => {
+      this.free_day = data;
     });
   }
 
@@ -62,6 +67,17 @@ export class PlanComponent implements OnInit {
 
   getEventsForDate(date: Dayjs): Event[] {
     return this.events.filter(event => dayjs(event.date).isSame(date, 'day'));
+  }
+  getFreeDayForDate(date: Dayjs): FreeDay[] {
+    return this.free_day.filter(free_day => dayjs(free_day.date).isSame(date, 'day'));
+  }
+
+  getEventsForDateAndUser(date: Dayjs, user: User): Event[] {
+    return this.events.filter(event => dayjs(event.date).isSame(date, 'day') && event.user.id === user.id);
+  }
+  
+  hasFreeDay(date: Dayjs, user: User): boolean {
+    return this.free_day.some(free_day => dayjs(free_day.date).isSame(date, 'day') && free_day.user.id === user.id);
   }
 
   previousMonth() {

@@ -5,18 +5,28 @@
 </div>
 
 <div class="timeline-container">
-  <div class="timeline">
-    <div class="event" *ngFor="let date of dates">
-      <div class="date">{{ date.format('DD MMM YYYY') }}</div>
-      <div class="event-details" *ngFor="let event of getEventsForDate(date)">
-        <strong>User:</strong> {{ event.user.first_name }} {{ event.user.last_name }}<br>
-        <strong>Shift:</strong> {{ event.shift_name }}<br>
-        <strong>Start Time:</strong> {{ event.start_time }}<br>
-        <strong>End Time:</strong> {{ event.end_time }}<br>
-      </div>
-    </div>
-  </div>
+  <table class="timeline-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th *ngFor="let date of dates">{{ date.format('DD MMM YYYY') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td class="user-name">{{ user.first_name }} {{ user.last_name }}</td>
+        <td *ngFor="let date of dates">
+          <div *ngIf="hasFreeDay(date, user)" style="background-color:aquamarine;">Dzień wolny</div>
+          <div class="event-details" *ngFor="let event of getEventsForDateAndUser(date, user)">
+            {{ event.shift_name }}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+
+
 
 <div>
   <h1>Shift List</h1>

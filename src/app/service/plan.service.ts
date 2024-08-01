@@ -19,6 +19,12 @@ export interface Shift {
   end_time: string;
 }
 
+export interface FreeDay{
+  user: User;
+  date: string;
+  reason: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,8 +36,10 @@ export class PlanService {
   getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.apiUrl}/events/`);
   }
-
   getShifts(): Observable<Shift[]> {
     return this.http.get<Shift[]>(`${this.apiUrl}/shifts/`);
+  }
+  getFreeDays(): Observable<FreeDay[]> {
+    return this.http.get<FreeDay[]>(`${this.apiUrl}/free_day/`);
   }
 }
