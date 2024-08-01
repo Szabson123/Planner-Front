@@ -4,12 +4,22 @@
   <button (click)="nextMonth()">Next →</button>
 </div>
 
+<div class="controls">
+  <button (click)="previousMonth()">← Previous</button>
+  <span>{{ currentMonth.format('MMMM YYYY') }}</span>
+  <button (click)="nextMonth()">Next →</button>
+</div>
+
 <div class="timeline-container">
   <table class="timeline-table">
     <thead>
       <tr>
         <th></th>
         <th *ngFor="let date of dates">{{ date.format('DD MMM YYYY') }}</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th *ngFor="let date of dates">{{ date.format('dddd') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -25,6 +35,7 @@
     </tbody>
   </table>
 </div>
+
 
 
 
