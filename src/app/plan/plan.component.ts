@@ -93,4 +93,24 @@ export class PlanComponent implements OnInit {
   formatTime(time: string): string {
     return time.slice(0, -3);
   }
+
+  generatePlanner() {
+    this.planService.generatePlanner().subscribe(
+      response => {
+        console.log('Planner generated successfully', response);
+        this.refreshEvents();
+      },
+      error => {
+        console.error('Error generating planner', error);
+      }
+    );
+  }
+
+  refreshEvents() {
+    this.planService.getEvents().subscribe((data: Event[]) => {
+      this.events = data;
+      this.generateDatesForCurrentMonth();
+    });
+  }
 }
+

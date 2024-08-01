@@ -19,14 +19,15 @@
 .user-name {
   text-align: left;
   font-weight: bold;
-  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+  white-space: nowrap; 
 }
 
 .event_name{
   text-align: left;
   font-weight: bold;
-  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+  white-space: nowrap; 
 }
+
 .event_hours{
   text-align: center;
   color: gray;

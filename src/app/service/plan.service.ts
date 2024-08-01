@@ -19,7 +19,7 @@ export interface Shift {
   end_time: string;
 }
 
-export interface FreeDay{
+export interface FreeDay {
   user: User;
   date: string;
   reason: string;
@@ -36,10 +36,16 @@ export class PlanService {
   getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.apiUrl}/events/`);
   }
+
   getShifts(): Observable<Shift[]> {
     return this.http.get<Shift[]>(`${this.apiUrl}/shifts/`);
   }
+
   getFreeDays(): Observable<FreeDay[]> {
     return this.http.get<FreeDay[]>(`${this.apiUrl}/free_day/`);
+  }
+
+  generatePlanner(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/generate-planner/`, {});
   }
 }
