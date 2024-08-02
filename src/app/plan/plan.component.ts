@@ -131,6 +131,7 @@ export class PlanComponent implements OnInit {
       this.generateDatesForCurrentMonth();
     });
   }
+  
   applyFilter() {
     if (!this.selectedShift) {
       this.filteredUsers = this.users;
@@ -141,5 +142,32 @@ export class PlanComponent implements OnInit {
 
       this.filteredUsers = this.users.filter(user => usersWithSelectedShift.includes(user.id));
     }
+    this.sortUsers();
+  }
+
+  sortUsers() {
+    this.filteredUsers.sort((a, b) => {
+      const shiftA = this.getFirstShiftForUser(a);
+      const shiftB = this.getFirstShiftForUser(b);
+
+      if (shiftA && shiftB) {
+        return shiftA.name.localeCompare(shiftB.name);
+      } else if (shiftA) {
+        return -1;
+      } else if (shiftB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  getFirstShiftForUser(user: User): Shift | null {
+    const userEvents = this.events.filter(event => event.user.id === user.id);
+    if (userEvents.length > 0) {
+      const firstEvent = userEvents[0];
+      return this.shifts.find(shift => shift.name === firstEvent.shift_name) || null;
+    }
+    return null;
   }
 }
