@@ -62,6 +62,9 @@ export class PlanService {
   getAvailability(): Observable<Availability[]> {
     return this.http.get<Availability[]>(`${this.apiUrl}/availability/`);
   }
+  getAvailabilityForMonth(month: string): Observable<Availability[]> {
+    return this.http.get<Availability[]>(`${this.apiUrl}/availability/?month=${month}`);
+  }
 
   generatePlanner(): Observable<any> {
     return this.http.post(`${this.apiUrl}/generate-planner/`, {});

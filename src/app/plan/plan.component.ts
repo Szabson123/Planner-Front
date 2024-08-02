@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/pl';
-import { PlanService, Event, Shift, FreeDay } from '../service/plan.service';
+import { PlanService, Event, Shift, FreeDay, Availability } from '../service/plan.service';
 import { User } from '../service/users.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,6 +32,7 @@ export class PlanComponent implements OnInit {
   public selectedShift: string = '';
 
   private freeDays: FreeDay[] = [];
+  private availability: Availability[] =[];
   private users: User[] = [];
 
   constructor(
@@ -50,6 +51,7 @@ export class PlanComponent implements OnInit {
     this.users = data?.users || [];
     this.filteredUsers = [...this.users];
     this.freeDays = data?.freeDays || [];
+    this.availability = data?.availability || [];
 
     this.generateDatesForCurrentMonth();
     this.applyFilter();
@@ -101,6 +103,9 @@ export class PlanComponent implements OnInit {
   public hasFreeDay(date: Dayjs, user: User): boolean {
     return this.freeDays.some(day => dayjs(day.date).isSame(date, 'day') && day.user.id === user.id);
   }
+  public hasAvailibility(date: Dayjs, user: User): boolean {
+    return this.availability.some(day => dayjs(day.date).isSame(date, 'day') && day.user.id === user.id);
+  }
 
   public generatePlanner(): void {
     this.planService.generatePlanner().subscribe({
@@ -132,6 +137,7 @@ export class PlanComponent implements OnInit {
     this.currentMonth = newMonth;
     this.loadEventsForCurrentMonth();
     this.loadFreeDaysForCurrentMonth();
+    this.loadAvailabilityDaysForCurrentMonth();
   }
 
   private refreshEvents(): void {
@@ -206,6 +212,14 @@ export class PlanComponent implements OnInit {
   private loadFreeDaysForCurrentMonth(): void {
     this.planService.getFreeDaysForMonth(this.currentMonth.format('YYYY-MM')).subscribe(data => {
       this.freeDays = data;
+
+      this._cdr.markForCheck();
+    });
+  }
+
+  private loadAvailabilityDaysForCurrentMonth(): void {
+    this.planService.getAvailabilityForMonth(this.currentMonth.format('YYYY-MM')).subscribe(data => {
+      this.availability = data;
 
       this._cdr.markForCheck();
     });
