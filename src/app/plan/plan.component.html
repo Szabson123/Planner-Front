@@ -27,10 +27,13 @@
         <td class="user-name">{{ user.first_name }} {{ user.last_name }}</td>
         <td *ngFor="let date of dates">
           <div *ngIf="hasFreeDay(date, user)" style="background-color:aquamarine;">Dzień wolny</div>
-          <div class="event-details" *ngFor="let event of getFilteredEventsForDateAndUser(date, user)">
-            <div class="event_name">{{ event.shift_name }}</div>
-            <div class="event_hours">{{ formatTime(event.start_time)}} - {{formatTime(event.end_time)}}</div>
-          </div>
+
+          <ng-container *ngIf="!hasFreeDay(date, user)">
+            <div class="event-details" *ngFor="let event of getFilteredEventsForDateAndUser(date, user)">
+              <div class="event_name">{{ event.shift_name }}</div>
+              <div class="event_hours">{{ event.start_time | formatTime }} - {{ event.end_time | formatTime }}</div>
+            </div>
+          </ng-container>
         </td>
       </tr>
     </tbody>

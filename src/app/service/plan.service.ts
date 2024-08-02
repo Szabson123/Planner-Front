@@ -45,6 +45,14 @@ export class PlanService {
     return this.http.get<FreeDay[]>(`${this.apiUrl}/free_day/`);
   }
 
+  getEventsForMonth(month: string): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.apiUrl}/events/?month=${month}`);
+  }
+
+  getFreeDaysForMonth(month: string): Observable<FreeDay[]> {
+    return this.http.get<FreeDay[]>(`${this.apiUrl}/free_day/?month=${month}`);
+  }
+
   generatePlanner(): Observable<any> {
     return this.http.post(`${this.apiUrl}/generate-planner/`, {});
   }
