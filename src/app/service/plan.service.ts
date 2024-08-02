@@ -25,6 +25,12 @@ export interface FreeDay {
   reason: string;
 }
 
+export interface Availability {
+  user: User;
+  date: string;
+  acceptance: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -51,6 +57,10 @@ export class PlanService {
 
   getFreeDaysForMonth(month: string): Observable<FreeDay[]> {
     return this.http.get<FreeDay[]>(`${this.apiUrl}/free_day/?month=${month}`);
+  }
+
+  getAvailability(): Observable<Availability[]> {
+    return this.http.get<Availability[]>(`${this.apiUrl}/availability/`);
   }
 
   generatePlanner(): Observable<any> {
