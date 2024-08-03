@@ -73,4 +73,10 @@ export class PlanService {
   restorePlanner(): Observable<any> {
     return this.http.post(`${this.apiUrl}/restore-plan/`, {});
   }
+
+  addFreeDays(start_date: string, end_date: string, reason: string):Observable<any>{
+    const payload = {start_date, end_date, reason};
+    return this.http.post<any>(`${this.apiUrl}/free_day/`, payload)
+    
+  }
 }

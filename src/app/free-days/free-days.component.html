@@ -1,0 +1,17 @@
+<div>
+    <form (ngSubmit)="onSubmit(freeDayForm)" #freeDayForm="ngForm">
+        <div>
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" ngModel required>
+        </div>
+        <div>
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date" ngModel required>
+        </div>
+        <div>
+            <label for="reason">Reason:</label>
+            <input type="text" id="reason" name="reason" ngModel required>
+        </div>
+        <button type="submit">Add Free Days</button>
+    </form>
+</div>
