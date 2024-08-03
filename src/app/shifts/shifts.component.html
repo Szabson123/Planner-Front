@@ -1,1 +1,28 @@
-<p>shifts works!</p>
+<div>
+    <form (ngSubmit)="onSubmit(shiftForm)" #shiftForm="ngForm">
+      <div>
+        <label for="start_time">Start Time:</label>
+        <input type="time" id="start_time" name="start_time" ngModel required>
+      </div>
+      <div>
+        <label for="end_time">End Time:</label>
+        <input type="time" id="end_time" name="end_time" ngModel required>
+      </div>
+      <div>
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" ngModel required>
+      </div>
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" ngModel required>
+      </div>
+      <div>
+        <label for="users">Users:</label>
+        <div *ngFor="let user of users; let i = index">
+          <input type="checkbox" [value]="user.id" (change)="onCheckboxChange($event, user.id)" name="user{{i}}">{{ user.username }}
+        </div>
+      </div>
+      <button type="submit">Add Shift</button>
+    </form>
+  </div>
+  

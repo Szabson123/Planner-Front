@@ -83,4 +83,8 @@ export class PlanService {
   addAvailability(availability: Availability): Observable<Availability> {
     return this.http.post<Availability>(`${this.apiUrl}/availability/`, availability);
   }
+
+  addShift(shift: Shift): Observable<Shift> {
+    return this.http.post<Shift>(`${this.apiUrl}/shifts/`, shift)
+  }
 }
