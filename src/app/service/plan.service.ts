@@ -26,7 +26,7 @@ export interface FreeDay {
 }
 
 export interface Availability {
-  user: User;
+  user?: any;
   date: string;
   acceptance: string;
 }
@@ -78,5 +78,9 @@ export class PlanService {
     const payload = {start_date, end_date, reason};
     return this.http.post<any>(`${this.apiUrl}/free_day/`, payload)
     
+  }
+
+  addAvailability(availability: Availability): Observable<Availability> {
+    return this.http.post<Availability>(`${this.apiUrl}/availability/`, availability);
   }
 }

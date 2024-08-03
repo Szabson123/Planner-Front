@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { PlanComponent } from './plan/plan.component';
 import { planResolver } from "./plan/plan.resolver";
-import { AvaibilityComponent } from './avaibility/avaibility.component';
+import { AvailabilityComponent } from './availability/availability.component';
 import { FreeDaysComponent } from './free-days/free-days.component';
 
 export const routes: Routes = [
@@ -12,10 +12,10 @@ export const routes: Routes = [
       planData: planResolver
     }
   },
-  
+
   {
     path: 'avaibility',
-    component: AvaibilityComponent
+    component: AvailabilityComponent
   },
 
   { path: 'free_days', 
