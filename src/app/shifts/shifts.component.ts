@@ -35,7 +35,7 @@ export class ShiftsComponent implements OnInit {
   onSubmit(form: NgForm) {
     if (form.valid) {
       const shift: Shift = {
-        users: this.selectedUserIds as any, // Przesyłanie wybranych identyfikatorów użytkowników jako tablica
+        users: this.selectedUserIds as any, 
         name: form.value.name,
         description: form.value.description,
         start_time: form.value.start_time,
@@ -45,7 +45,7 @@ export class ShiftsComponent implements OnInit {
       this.planService.addShift(shift).subscribe(response => {
         console.log('Shift created', response);
         form.reset();
-        this.selectedUserIds = []; // Resetowanie zaznaczenia użytkowników
+        this.selectedUserIds = [];
       }, error => {
         console.error('Something went wrong', error);
       });
