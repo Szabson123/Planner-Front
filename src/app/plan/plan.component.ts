@@ -29,11 +29,22 @@ export class PlanComponent implements OnInit {
   public dates: Dayjs[] = [];
   public currentMonth: Dayjs;
   public filteredUsers: User[] = [];
-  public selectedShift: string = '';
+  public selectedShift: string = ''; 
 
   private freeDays: FreeDay[] = [];
   private availability: Availability[] =[];
   private users: User[] = [];
+
+  // Mapa skrótów dni tygodnia
+  private dayShortcuts: { [key: string]: string } = {
+    'poniedziałek': 'pn',
+    'wtorek': 'wt',
+    'środa': 'sr',
+    'czwartek': 'czw',
+    'piątek': 'pt',
+    'sobota': 'sob',
+    'niedziela': 'nd'
+  };
 
   constructor(
     private readonly _cdr: ChangeDetectorRef,
@@ -43,6 +54,7 @@ export class PlanComponent implements OnInit {
     this.currentMonth = dayjs().tz('Europe/Warsaw').startOf('month');
   }
 
+  
   ngOnInit() {
     const data = this._route.snapshot.data['planData'];
 
@@ -80,6 +92,10 @@ export class PlanComponent implements OnInit {
 
   public nextMonth(): void {
     this.updateCurrentMonth(this.currentMonth.add(1, 'month'));
+  }
+
+  public formatDay(date: Dayjs): string {
+    return this.dayShortcuts[date.format('dddd')];
   }
 
   // public getEventsForDate(date: Dayjs): Event[] {

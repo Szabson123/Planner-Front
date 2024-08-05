@@ -16,23 +16,24 @@
             <option *ngFor="let shift of shifts" [value]="shift.name">{{ shift.name }}</option>
           </select>
         </div></th>
-        <th *ngFor="let date of dates">{{ date.format('DD MMM YYYY') }}</th>
+        <th *ngFor="let date of dates">{{ date.format('DD MMM') }}</th>
       </tr>
       <tr>
         <th>Imię i nazwisko</th>
-        <th *ngFor="let date of dates">{{ date.format('dddd') }}</th>
+        <th *ngFor="let date of dates">{{ formatDay(date) }}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let user of filteredUsers">
         <td class="user-name">{{ user.first_name }} {{ user.last_name }}</td>
         <td *ngFor="let date of dates">
-          <div *ngIf="hasFreeDay(date, user)" style="background-color:aquamarine;">Dzień wolny</div>
-          <div *ngIf="hasAvailibility(date, user)" style="background-color:blue;">Dostępność</div>
+          <div *ngIf="hasFreeDay(date, user)" style="background-color:aquamarine;">W</div>
+          <div *ngIf="hasAvailibility(date, user)" style="background-color:blue;">D</div>
           <ng-container *ngIf="!hasFreeDay(date, user)">
             <div class="event-details" *ngFor="let event of getFilteredEventsForDateAndUser(date, user)">
-              <div class="event_name">{{ event.shift_name }}</div>
-              <div class="event_hours">{{ event.start_time | formatTime }} - {{ event.end_time | formatTime }}</div>
+              <!-- <div class="event_name">{{ event.shift_name }}</div> -->
+              <div class="event_hours">{{ event.start_time | formatTime }}</div>
+              <div class="event_hours">{{ event.end_time | formatTime }}</div>
             </div>
           </ng-container>
         </td>
