@@ -72,8 +72,17 @@ export class PlanComponent implements OnInit {
     this.availability = data?.availability || [];
 
     this.generateDatesForCurrentMonth();
+    this.loadAllDataForCurrentMonth();
     this.applyFilter();
   }
+  
+  private loadAllDataForCurrentMonth(): void {
+    this.loadEventsForCurrentMonth();
+    this.loadFreeDaysForCurrentMonth();
+    this.loadAvailabilityDaysForCurrentMonth();
+    this.loadWeekendsForCurrentMonth(); 
+  }
+
 
   public restorePlanner(): void {
     this.planService.restorePlanner().subscribe({
@@ -169,7 +178,7 @@ export class PlanComponent implements OnInit {
     this.loadEventsForCurrentMonth();
     this.loadFreeDaysForCurrentMonth();
     this.loadAvailabilityDaysForCurrentMonth();
-    this.loadWeekendsForCurrentMonth(); // Load weekends for the current month
+    this.loadWeekendsForCurrentMonth(); 
   }
 
   private refreshEvents(): void {
@@ -256,7 +265,7 @@ export class PlanComponent implements OnInit {
     });
   }
 
-  private loadWeekendsForCurrentMonth(): void { // New method to load weekends
+  private loadWeekendsForCurrentMonth(): void { 
     this.planService.getWeekendsForMonth(this.currentMonth.format('YYYY-MM')).subscribe(data => {
       this.weekends = data;
 

@@ -29,16 +29,18 @@
         <td class="user-name">{{ user.first_name }} {{ user.last_name }}</td>
         <td *ngFor="let date of dates">
           <div *ngIf="hasFreeDay(date, user)" class="free-day-p">🌴</div>
-          <div *ngIf="hasAvailability(date, user)" class="availibility-p">✋</div>
           <ng-container *ngIf="!hasFreeDay(date, user)">
             <div class="event-details" *ngFor="let event of getFilteredEventsForDateAndUser(date, user)" [ngStyle]="{'background-color': getColorForShift(event.shift_name)}">
               <div class="event_hours">{{ event.start_time | formatTime }}</div>
               <div class="event_hours">{{ event.end_time | formatTime }}</div>
             </div>
-            <div class="event-details" *ngFor="let weekend of getFilteredWeekendForDateAndUser(date, user)">
-              <div><p>weekend</p></div>
-            </div>
+            <ng-container *ngIf="!hasAvailability(date, user)">
+              <div class="event-details" *ngFor="let weekend of getFilteredWeekendForDateAndUser(date, user)">
+                <div><p class="weekend-p">🥂</p></div>
+              </div>
+            </ng-container>
           </ng-container>
+          <div *ngIf="hasAvailability(date, user)" class="availibility-p">🙋‍♂️</div>
         </td>
       </tr>
     </tbody>
