@@ -31,6 +31,12 @@ export interface Availability {
   acceptance: string;
 }
 
+export interface Weekend {
+  user: User;
+  date: string;
+  shift_name: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -54,9 +60,15 @@ export class PlanService {
   getEventsForMonth(month: string): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.apiUrl}/events/?month=${month}`);
   }
-
   getFreeDaysForMonth(month: string): Observable<FreeDay[]> {
     return this.http.get<FreeDay[]>(`${this.apiUrl}/free_day/?month=${month}`);
+  }
+
+  getWeekends(): Observable<Weekend[]> {
+    return this.http.get<Weekend[]>(`${this.apiUrl}/weekend/`);
+  }
+  getWeekendsForMonth(month: string): Observable<Weekend[]> {
+    return this.http.get<Weekend[]>(`${this.apiUrl}/weekend/?month=${month}`);
   }
 
   getAvailability(): Observable<Availability[]> {
@@ -79,7 +91,6 @@ export class PlanService {
     return this.http.post<any>(`${this.apiUrl}/free_day/`, payload)
     
   }
-
   addAvailability(availability: Availability): Observable<Availability> {
     return this.http.post<Availability>(`${this.apiUrl}/availability/`, availability);
   }

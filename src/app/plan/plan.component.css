@@ -1,7 +1,10 @@
+body{
+  background-color: #f5fcff;
+}
 .timeline-container {
   overflow-x: auto;
   padding: 10px;
-  border: 1px solid #ccc;
+  background-color: #f5fcff;
 }
 
 .timeline-table {
@@ -15,8 +18,15 @@
   border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
-  font-family: "Ubuntu", sans-serif;
+  font-family: "Roboto Slab", serif;
   font-weight: 400;
+  color: rgb(43, 43, 43);
+}
+
+.timeline-table .event-details {
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 2px;
 }
 
 .user-name {
@@ -155,20 +165,11 @@
   margin-top: 10px;
 }
 
-.event-morning {
-  background-color: lightblue;
-  width: 100%;
-  height: 100%;
-}
+/* plan.component.css */
 
-.event-afternoon {
-  background-color: lightgreen;
-  width: 100%;
-  height: 100%;
+.availibility-p{
+  font-size: 30px;
 }
-
-.event-night {
-  background-color: lightcoral;
-  width: 100%;
-  height: 100%;
+.free-day-p{
+  font-size: 30px;
 }

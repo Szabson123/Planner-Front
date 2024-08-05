@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/pl';
-import { PlanService, Event, Shift, FreeDay, Availability } from '../service/plan.service';
+import { PlanService, Event, Shift, FreeDay, Availability, Weekend } from '../service/plan.service';
 import { User } from '../service/users.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -26,6 +26,7 @@ dayjs.locale('pl');
 export class PlanComponent implements OnInit {
   public events: Event[] = [];
   public shifts: Shift[] = [];
+  public weekends: Weekend[] = [];
   public dates: Dayjs[] = [];
   public currentMonth: Dayjs;
   public filteredUsers: User[] = [];
@@ -35,7 +36,6 @@ export class PlanComponent implements OnInit {
   private availability: Availability[] =[];
   private users: User[] = [];
 
-  // Mapa skrótów dni tygodnia
   private dayShortcuts: { [key: string]: string } = {
     'poniedziałek': 'pn',
     'wtorek': 'wt',
@@ -46,6 +46,12 @@ export class PlanComponent implements OnInit {
     'niedziela': 'nd'
   };
 
+  private colors: string[] = [
+    '#FFCDD2', '#B2EBF2', '#C8E6C9', '#D1C4E9', '#C5CAE9', '#BBDEFB',
+    '#B3E5FC', '#B2EBF2', '#B2DFDB', '#C8E6C9', '#DCEDC8', '#F0F4C3',
+    '#FFECB3', '#FFE0B2', '#FFCCBC', '#D7CCC8', '#F5F5F5', '#CFD8DC'
+  ];
+
   constructor(
     private readonly _cdr: ChangeDetectorRef,
     private readonly _route: ActivatedRoute,
@@ -54,11 +60,11 @@ export class PlanComponent implements OnInit {
     this.currentMonth = dayjs().tz('Europe/Warsaw').startOf('month');
   }
 
-  
   ngOnInit() {
     const data = this._route.snapshot.data['planData'];
 
     this.events = data?.events || [];
+    this.weekends = data?.weekends || [];
     this.shifts = data?.shifts || [];
     this.users = data?.users || [];
     this.filteredUsers = [...this.users];
@@ -98,16 +104,16 @@ export class PlanComponent implements OnInit {
     return this.dayShortcuts[date.format('dddd')];
   }
 
-  // public getEventsForDate(date: Dayjs): Event[] {
-  //   return this.events.filter(event => dayjs(event.date).isSame(date, 'day'));
-  // }
-  //
-  // public getFreeDayForDate(date: Dayjs): FreeDay[] {
-  //   return this.free_day.filter(free_day => dayjs(free_day.date).isSame(date, 'day'));
-  // }
+  getColorForShift(shiftName: string): string {
+    const index = this.shifts.findIndex(shift => shift.name === shiftName);
+    return this.colors[index % this.colors.length];
+  }
 
   public getEventsForDateAndUser(date: Dayjs, user: User): Event[] {
     return this.events.filter(event => dayjs(event.date).isSame(date, 'day') && event.user.id === user.id);
+  }
+  public getWeekendForDateAndUser(date: Dayjs, user: User): Weekend[] {
+    return this.weekends.filter(weekend => dayjs(weekend.date).isSame(date, 'day') && weekend.user.id === user.id);
   }
 
   public getFilteredEventsForDateAndUser(date: Dayjs, user: User): Event[] {
@@ -115,12 +121,21 @@ export class PlanComponent implements OnInit {
       !this.selectedShift || event.shift_name === this.selectedShift
     );
   }
+  public getFilteredWeekendForDateAndUser(date: Dayjs, user: User): Weekend[] {
+    return this.getWeekendForDateAndUser(date, user).filter(weekend =>
+      !this.selectedShift || weekend.shift_name === this.selectedShift
+    );
+  }
 
   public hasFreeDay(date: Dayjs, user: User): boolean {
     return this.freeDays.some(day => dayjs(day.date).isSame(date, 'day') && day.user.id === user.id);
   }
-  public hasAvailibility(date: Dayjs, user: User): boolean {
+  
+  public hasAvailability(date: Dayjs, user: User): boolean {
     return this.availability.some(day => dayjs(day.date).isSame(date, 'day') && day.user.id === user.id);
+  }
+  public hasWeekend(date: Dayjs, user: User): boolean {
+    return this.weekends.some(day => dayjs(day.date).isSame(date, 'day') && day.user.id === user.id);
   }
 
   public generatePlanner(): void {
@@ -154,6 +169,7 @@ export class PlanComponent implements OnInit {
     this.loadEventsForCurrentMonth();
     this.loadFreeDaysForCurrentMonth();
     this.loadAvailabilityDaysForCurrentMonth();
+    this.loadWeekendsForCurrentMonth(); // Load weekends for the current month
   }
 
   private refreshEvents(): void {
@@ -214,7 +230,6 @@ export class PlanComponent implements OnInit {
     this._cdr.markForCheck();
   }
 
-
   private loadEventsForCurrentMonth(): void {
     this.planService.getEventsForMonth(this.currentMonth.format('YYYY-MM')).subscribe(data => {
       this.events = data;
@@ -236,6 +251,14 @@ export class PlanComponent implements OnInit {
   private loadAvailabilityDaysForCurrentMonth(): void {
     this.planService.getAvailabilityForMonth(this.currentMonth.format('YYYY-MM')).subscribe(data => {
       this.availability = data;
+
+      this._cdr.markForCheck();
+    });
+  }
+
+  private loadWeekendsForCurrentMonth(): void { // New method to load weekends
+    this.planService.getWeekendsForMonth(this.currentMonth.format('YYYY-MM')).subscribe(data => {
+      this.weekends = data;
 
       this._cdr.markForCheck();
     });
