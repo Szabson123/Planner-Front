@@ -177,3 +177,49 @@ body{
   font-size: 25px;
   margin: 0;
 }
+
+/* plan.component.css */
+/* plan.component.css */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip::after {
+  content: attr(data-title);
+  white-space: pre; /* Zachowaj nowe linie */
+  visibility: hidden;
+  opacity: 0;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: left;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 10;
+  bottom: 100%; /* Pozycja tooltipa nad elementem */
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.3s;
+  font-size: 25px; /* Ustawienie rozmiaru czcionki dla tekstu w tooltipie */
+}
+
+.tooltip:hover::after {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Dodatkowe stylizacje */
+.free-day-p,
+.event-details,
+.availibility-p {
+  position: relative;
+}
+
+.free-day-p::after,
+.event-details::after,
+.availibility-p::after {
+  max-width: 400px; /* Ogranicz szerokość tooltipa */
+  font-size: 15px; /* Dodanie stylu do elementów tooltipa */
+}
