@@ -15,55 +15,77 @@ export class PlanComponent implements OnInit {
   public events: Event[] = [];
   public freeDays: FreeDay[] = [];
   public weekends: Weekend[] = [];
-  public currentMonth: Dayjs; // Aktualny miesiąc
+  public currentMonth: Dayjs;
+  public isLoading = true; // Zmienna, która kontroluje stan ładowania
+
+  // Cache dla danych
+  private cache: { [month: string]: { events: Event[], freeDays: FreeDay[], weekends: Weekend[] } } = {};
 
   constructor(private planService: PlanService) {
-    this.currentMonth = dayjs().startOf('month'); // Ustawiamy na bieżący miesiąc
+    this.currentMonth = dayjs().startOf('month'); // Bieżący miesiąc
   }
 
   ngOnInit(): void {
     this.loadAllDataForCurrentMonth();
+    this.preloadAdjacentMonths(); // Pre-load danych dla poprzedniego i następnego miesiąca
   }
 
-  // Metoda do ładowania wszystkich danych dla aktualnego miesiąca
   private loadAllDataForCurrentMonth(): void {
-    this.loadEventsForCurrentMonth();
-    this.loadFreeDaysForCurrentMonth();
-    this.loadWeekendsForCurrentMonth();
+    this.isLoading = true; // Zaczynamy ładowanie
+    const currentMonthStr = this.currentMonth.format('YYYY-MM');
+
+    if (this.cache[currentMonthStr]) {
+      this.loadFromCache(currentMonthStr);
+      this.isLoading = false; // Ładowanie zakończone
+    } else {
+      this.loadDataForMonth(currentMonthStr);
+    }
   }
 
-  private loadEventsForCurrentMonth(): void {
-    const currentMonthStr = this.currentMonth.format('YYYY-MM');
-    this.planService.getEventsForMonth(currentMonthStr).subscribe({
+  private preloadAdjacentMonths(): void {
+    const previousMonth = this.currentMonth.subtract(1, 'month').format('YYYY-MM');
+    const nextMonth = this.currentMonth.add(1, 'month').format('YYYY-MM');
+
+    if (!this.cache[previousMonth]) {
+      this.loadDataForMonth(previousMonth);
+    }
+    if (!this.cache[nextMonth]) {
+      this.loadDataForMonth(nextMonth);
+    }
+  }
+
+  private loadDataForMonth(month: string): void {
+    let events: Event[] = [];
+    let freeDays: FreeDay[] = [];
+    let weekends: Weekend[] = [];
+
+    this.planService.getEventsForMonth(month).subscribe({
       next: (data: Event[]) => {
-        // Filtrowanie eventów po dacie w bieżącym miesiącu
-        this.events = data.filter(event => dayjs(event.date).isSame(this.currentMonth, 'month'));
+        events = data.filter(event => dayjs(event.date).isSame(month, 'month'));
+        this.cache[month] = { events, freeDays, weekends };
+        this.checkIfAllDataLoaded(); // Sprawdzamy, czy załadowano wszystkie dane
       },
       error: (error) => {
         console.error('Błąd podczas pobierania wydarzeń:', error);
       }
     });
-  }
 
-  private loadFreeDaysForCurrentMonth(): void {
-    const currentMonthStr = this.currentMonth.format('YYYY-MM');
-    this.planService.getFreeDaysForMonth(currentMonthStr).subscribe({
+    this.planService.getFreeDaysForMonth(month).subscribe({
       next: (data: FreeDay[]) => {
-        // Filtrowanie dni wolnych po dacie w bieżącym miesiącu
-        this.freeDays = data.filter(freeDay => dayjs(freeDay.date).isSame(this.currentMonth, 'month'));
+        freeDays = data.filter(freeDay => dayjs(freeDay.date).isSame(month, 'month'));
+        this.cache[month] = { ...this.cache[month], freeDays };
+        this.checkIfAllDataLoaded(); // Sprawdzamy, czy załadowano wszystkie dane
       },
       error: (error) => {
         console.error('Błąd podczas pobierania dni wolnych:', error);
       }
     });
-  }
 
-  private loadWeekendsForCurrentMonth(): void {
-    const currentMonthStr = this.currentMonth.format('YYYY-MM');
-    this.planService.getWeekendsForMonth(currentMonthStr).subscribe({
+    this.planService.getWeekendsForMonth(month).subscribe({
       next: (data: Weekend[]) => {
-        // Filtrowanie weekendów po dacie w bieżącym miesiącu
-        this.weekends = data.filter(weekend => dayjs(weekend.date).isSame(this.currentMonth, 'month'));
+        weekends = data.filter(weekend => dayjs(weekend.date).isSame(month, 'month'));
+        this.cache[month] = { ...this.cache[month], weekends };
+        this.checkIfAllDataLoaded(); // Sprawdzamy, czy załadowano wszystkie dane
       },
       error: (error) => {
         console.error('Błąd podczas pobierania weekendów:', error);
@@ -71,19 +93,38 @@ export class PlanComponent implements OnInit {
     });
   }
 
-  // Metody do zmiany miesiąca
+  private loadFromCache(month: string): void {
+    const cachedData = this.cache[month];
+    this.events = cachedData.events;
+    this.freeDays = cachedData.freeDays;
+    this.weekends = cachedData.weekends;
+  }
+
+  // Sprawdzamy, czy załadowano wszystkie dane
+  private checkIfAllDataLoaded(): void {
+    const currentMonthStr = this.currentMonth.format('YYYY-MM');
+    const cachedData = this.cache[currentMonthStr];
+    if (cachedData.events && cachedData.freeDays && cachedData.weekends) {
+      this.events = cachedData.events;
+      this.freeDays = cachedData.freeDays;
+      this.weekends = cachedData.weekends;
+      this.isLoading = false; // Zakończono ładowanie
+    }
+  }
+
   public previousMonth(): void {
     this.currentMonth = this.currentMonth.subtract(1, 'month'); // Cofnij o miesiąc
-    this.loadAllDataForCurrentMonth(); // Załaduj dane dla nowego miesiąca
+    this.loadAllDataForCurrentMonth();
+    this.preloadAdjacentMonths();
   }
 
   public nextMonth(): void {
     this.currentMonth = this.currentMonth.add(1, 'month'); // Przejdź do kolejnego miesiąca
-    this.loadAllDataForCurrentMonth(); // Załaduj dane dla nowego miesiąca
+    this.loadAllDataForCurrentMonth();
+    this.preloadAdjacentMonths();
   }
 
-  // Metoda do formatowania nazwy miesiąca (np. "Wrzesień 2024")
   public formatCurrentMonth(): string {
-    return this.currentMonth.format('MMMM YYYY'); // Format polski dla miesiąca
+    return this.currentMonth.format('MMMM YYYY');
   }
 }

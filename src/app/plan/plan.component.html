@@ -5,28 +5,35 @@
   <button (click)="nextMonth()">Następny miesiąc →</button>
 </div>
 
-<!-- Wyświetlanie wydarzeń, dni wolnych i weekendów -->
-<div *ngIf="events.length === 0 && weekends.length === 0 && freeDays.length === 0">
-  <p>Brak wydarzeń do wyświetlenia.</p>
+<!-- Wyświetlanie loadera podczas ładowania -->
+<div *ngIf="isLoading">
+  <p>Ładowanie danych...</p>
 </div>
 
-<ul *ngIf="events.length > 0 || weekends.length > 0 || freeDays.length > 0">
-  <!-- Wydarzenia standardowe -->
-  <li *ngFor="let event of events" [ngStyle]="{'background-color': '#FFCDD2'}">
-    <strong>{{ event.user.first_name }} {{ event.user.last_name }}</strong> - 
-    {{ event.shift_name }}: 
-    {{ event.start_time }} - {{ event.end_time }} ({{ event.date }})
-  </li>
+<!-- Wyświetlanie wydarzeń, dni wolnych i weekendów, gdy dane są załadowane -->
+<div *ngIf="!isLoading">
+  <ul *ngIf="events.length > 0 || weekends.length > 0 || freeDays.length > 0">
+    <!-- Wydarzenia standardowe -->
+    <li *ngFor="let event of events" [ngStyle]="{'background-color': '#FFCDD2'}">
+      <strong>{{ event.user.first_name }} {{ event.user.last_name }}</strong> - 
+      {{ event.shift_name }}: 
+      {{ event.start_time }} - {{ event.end_time }} ({{ event.date }})
+    </li>
 
-  <!-- Dni wolne -->
-  <li *ngFor="let freeDay of freeDays" [ngStyle]="{'background-color': '#C8E6C9'}">
-    <strong>{{ freeDay.user.first_name }} {{ freeDay.user.last_name }}</strong> - 
-    Dzień wolny: {{ freeDay.date }} - Powód: {{ freeDay.reason }}
-  </li>
+    <!-- Dni wolne -->
+    <li *ngFor="let freeDay of freeDays" [ngStyle]="{'background-color': '#C8E6C9'}">
+      <strong>{{ freeDay.user.first_name }} {{ freeDay.user.last_name }}</strong> - 
+      Dzień wolny: {{ freeDay.date }} - Powód: {{ freeDay.reason }}
+    </li>
 
-  <!-- Weekendy -->
-  <li *ngFor="let weekend of weekends" [ngStyle]="{'background-color': '#B3E5FC'}">
-    <strong>{{ weekend.user.first_name }} {{ weekend.user.last_name }}</strong> - 
-    Weekend: {{ weekend.date }} - Zmiana: {{ weekend.shift_name }}
-  </li>
-</ul>
+    <!-- Weekendy -->
+    <li *ngFor="let weekend of weekends" [ngStyle]="{'background-color': '#B3E5FC'}">
+      <strong>{{ weekend.user.first_name }} {{ weekend.user.last_name }}</strong> - 
+      Weekend: {{ weekend.date }} - Zmiana: {{ weekend.shift_name }}
+    </li>
+  </ul>
+
+  <div *ngIf="events.length === 0 && weekends.length === 0 && freeDays.length === 0">
+    <p>Brak wydarzeń do wyświetlenia.</p>
+  </div>
+</div>
