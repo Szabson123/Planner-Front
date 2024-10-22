@@ -1,26 +1,22 @@
-<!-- Pasek z nazwą miesiąca i strzałkami -->
+
 <div class="month-navigation">
   <button (click)="previousMonth()">← Poprzedni miesiąc</button>
   <span class="current-month">{{ formatCurrentMonth() }}</span>
   <button (click)="nextMonth()">Następny miesiąc →</button>
 </div>
 
-<!-- Wyświetlanie loadera podczas ładowania -->
 <div *ngIf="isLoading">
   <p>Ładowanie danych...</p>
 </div>
 
-<!-- Wyświetlanie wydarzeń, dni wolnych i weekendów, gdy dane są załadowane -->
 <div *ngIf="!isLoading">
   <ul *ngIf="events.length > 0 || weekends.length > 0 || freeDays.length > 0">
-    <!-- Wydarzenia standardowe -->
     <li *ngFor="let event of events" [ngStyle]="{'background-color': '#FFCDD2'}">
       <strong>{{ event.user.first_name }} {{ event.user.last_name }}</strong> - 
       {{ event.shift_name }}: 
       {{ event.start_time }} - {{ event.end_time }} ({{ event.date }})
     </li>
 
-    <!-- Dni wolne -->
     <li *ngFor="let freeDay of freeDays" [ngStyle]="{'background-color': '#C8E6C9'}">
       <strong>{{ freeDay.user.first_name }} {{ freeDay.user.last_name }}</strong> - 
       Dzień wolny: {{ freeDay.date }} - Powód: {{ freeDay.reason }}
