@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { PlanService, Event, FreeDay, Weekend } from '../service/plan.service';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/pl';
-import { forkJoin, Subject, Subscription, EMPTY, of, Observable } from 'rxjs';
-import { switchMap, distinctUntilChanged, catchError, tap, throttleTime, finalize, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject, Subscription, EMPTY, Observable, of, forkJoin } from 'rxjs';
+import { switchMap, distinctUntilChanged, catchError, tap, debounceTime, finalize, shareReplay, retry, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-plan',
@@ -19,92 +19,115 @@ export class PlanComponent implements OnInit, OnDestroy {
   public weekends: Weekend[] = [];
   public currentMonth: Dayjs;
   public isLoading = true;
+  public errorMessage: string | null = null; // Dodane do obsługi błędów
 
-  private cache: { [month: string]: { events: Event[], freeDays: FreeDay[], weekends: Weekend[] } } = {};
+  private cache: Map<string, { events: Event[], freeDays: FreeDay[], weekends: Weekend[] }> = new Map();
+  private readonly CACHE_LIMIT = 12; // Maksymalna liczba miesięcy w cache
 
-  private inProgressRequests: { [month: string]: Observable<void> } = {};
+  private inProgressRequests: Map<string, Observable<void>> = new Map();
 
-  private navigationSubject = new Subject<Dayjs>();
-  private preloadSubject = new Subject<string>();
-
+  private navigationSubject = new BehaviorSubject<Dayjs>(dayjs().startOf('month'));
+  
   private navigationSubscription!: Subscription;
-  private preloadSubscription!: Subscription;
+  private dataFetchSubscription!: Subscription;
+  private isInitialLoad = true;
 
   constructor(private planService: PlanService) {
-    this.currentMonth = dayjs().startOf('month');
+    this.currentMonth = this.navigationSubject.value;
   }
 
   ngOnInit(): void {
+    // Subskrypcja 1: Obsługuje nawigację i aktualizuje widok natychmiast
     this.navigationSubscription = this.navigationSubject.pipe(
-      throttleTime(300, undefined, { leading: true, trailing: true }),
-      distinctUntilChanged((prev, curr) => prev.isSame(curr, 'month')),
-      switchMap((newMonth) => {
-        this.currentMonth = newMonth;
-        this.clearCurrentMonthData();
-        const currentMonthStr = this.currentMonth.format('YYYY-MM');
+      distinctUntilChanged((prev, curr) => prev.isSame(curr, 'month'))
+    ).subscribe(newMonth => {
+      this.currentMonth = newMonth;
+      this.clearCurrentMonthData();
+      const monthStr = this.currentMonth.format('YYYY-MM');
 
-        if (this.cache[currentMonthStr]) {
-          this.loadFromCache(currentMonthStr);
-          this.isLoading = false;
-          this.preloadAdjacentMonths(newMonth);
+      if (this.cache.has(monthStr)) {
+        this.loadFromCache(monthStr);
+        this.isLoading = false;
+
+        // Preładowanie sąsiadujących miesięcy tylko przy pierwszym załadowaniu
+        if (this.isInitialLoad) {
+          this.isInitialLoad = false;
+          this.preloadAdjacentMonths(newMonth).subscribe();
+        }
+      } else {
+        this.isLoading = true;
+        // Dane będą ładowane przez drugą subskrypcję po debounceTime
+      }
+    });
+
+    // Subskrypcja 2: Debounces nawigację i zarządza ładowaniem danych
+    this.dataFetchSubscription = this.navigationSubject.pipe(
+      debounceTime(300), // Debounce tylko na ładowanie danych
+      distinctUntilChanged((prev, curr) => prev.isSame(curr, 'month')),
+      switchMap(newMonth => {
+        const monthStr = newMonth.format('YYYY-MM');
+
+        if (this.cache.has(monthStr)) {
+          // Dane już są w cache, nic nie robimy
           return EMPTY;
         } else {
-          return this.loadDataForMonthObservable(currentMonthStr, true).pipe(
+          return this.loadDataForMonthObservable(monthStr, true).pipe(
             tap(() => {
-              this.preloadAdjacentMonths(newMonth);
+              if (this.isInitialLoad) {
+                this.isInitialLoad = false;
+                this.preloadAdjacentMonths(newMonth).subscribe();
+              }
             })
           );
         }
       }),
-      catchError((error) => {
-        console.error('Błąd w subskrypcji nawigacji:', error);
+      catchError(error => {
+        console.error('Błąd w subskrypcji danych:', error);
+        this.errorMessage = 'Wystąpił problem z załadowaniem danych.';
         this.isLoading = false;
         return EMPTY;
       })
     ).subscribe();
-
-    this.preloadSubscription = this.preloadSubject.pipe(
-      switchMap((month) => this.loadDataForMonthObservable(month, false)),
-      catchError((error) => {
-        console.error('Błąd podczas preładowania:', error);
-        return EMPTY;
-      })
-    ).subscribe();
-
-    this.navigationSubject.next(this.currentMonth);
   }
 
   ngOnDestroy(): void {
     if (this.navigationSubscription) {
       this.navigationSubscription.unsubscribe();
     }
-    if (this.preloadSubscription) {
-      this.preloadSubscription.unsubscribe();
+    if (this.dataFetchSubscription) {
+      this.dataFetchSubscription.unsubscribe();
     }
   }
 
   private loadDataForMonthObservable(month: string, isCurrentMonth: boolean = false): Observable<void> {
-    if (this.inProgressRequests[month]) {
-      return this.inProgressRequests[month];
+    if (this.inProgressRequests.has(month)) {
+      return this.inProgressRequests.get(month)!;
     }
 
-    const monthDayjs = dayjs(month, 'YYYY-MM');
+    const load$ = forkJoin({
+      events: this.planService.getEventsForMonth(month),
+      freeDays: this.planService.getFreeDaysForMonth(month),
+      weekends: this.planService.getWeekendsForMonth(month)
+    }).pipe(
+      retry(2), // Ponów próbę 2 razy w przypadku błędu
+      tap(({ events, freeDays, weekends }) => {
+        const monthDayjs = dayjs(month, 'YYYY-MM');
 
-    const events$ = this.planService.getEventsForMonth(month);
-    const freeDays$ = this.planService.getFreeDaysForMonth(month);
-    const weekends$ = this.planService.getWeekendsForMonth(month);
-
-    const load$ = forkJoin([events$, freeDays$, weekends$]).pipe(
-      tap(([events, freeDays, weekends]) => {
         const filteredEvents = events.filter(event => dayjs(event.date).isSame(monthDayjs, 'month'));
         const filteredFreeDays = freeDays.filter(freeDay => dayjs(freeDay.date).isSame(monthDayjs, 'month'));
         const filteredWeekends = weekends.filter(weekend => dayjs(weekend.date).isSame(monthDayjs, 'month'));
 
-        this.cache[month] = {
+        this.cache.set(month, {
           events: filteredEvents,
           freeDays: filteredFreeDays,
           weekends: filteredWeekends
-        };
+        });
+
+        // Utrzymanie limitu cache
+        if (this.cache.size > this.CACHE_LIMIT) {
+          const firstKey = this.cache.keys().next().value!;
+          this.cache.delete(firstKey);
+        }
 
         if (isCurrentMonth) {
           this.events = filteredEvents;
@@ -116,32 +139,47 @@ export class PlanComponent implements OnInit, OnDestroy {
       catchError((error) => {
         console.error(`Błąd podczas pobierania danych dla miesiąca ${month}:`, error);
         if (isCurrentMonth) {
+          this.errorMessage = 'Wystąpił problem z załadowaniem danych dla wybranego miesiąca.';
           this.isLoading = false;
         }
         return EMPTY;
       }),
       finalize(() => {
-        delete this.inProgressRequests[month];
+        this.inProgressRequests.delete(month);
       }),
-      switchMap(() => of(void 0)),
+      map(() => void 0),
       shareReplay(1)
     );
 
-    this.inProgressRequests[month] = load$;
+    this.inProgressRequests.set(month, load$);
 
     return load$;
   }
 
-  private preloadAdjacentMonths(newMonth: Dayjs): void {
+  private preloadAdjacentMonths(newMonth: Dayjs): Observable<void> {
     const previousMonthStr = newMonth.subtract(1, 'month').format('YYYY-MM');
     const nextMonthStr = newMonth.add(1, 'month').format('YYYY-MM');
 
-    if (!this.cache[previousMonthStr]) {
-      this.preloadSubject.next(previousMonthStr);
+    const preloadObservables: Observable<void>[] = [];
+
+    if (!this.cache.has(previousMonthStr)) {
+      preloadObservables.push(this.loadDataForMonthObservable(previousMonthStr, false));
     }
-    if (!this.cache[nextMonthStr]) {
-      this.preloadSubject.next(nextMonthStr);
+    if (!this.cache.has(nextMonthStr)) {
+      preloadObservables.push(this.loadDataForMonthObservable(nextMonthStr, false));
     }
+
+    if (preloadObservables.length === 0) {
+      return of(void 0);
+    }
+
+    return forkJoin(preloadObservables).pipe(
+      map(() => void 0), // Przekształcenie Observable<void[]> na Observable<void>
+      catchError((error) => {
+        console.error('Błąd podczas preładowywania sąsiadujących miesięcy:', error);
+        return EMPTY;
+      })
+    );
   }
 
   public previousMonth(): void {
@@ -159,7 +197,7 @@ export class PlanComponent implements OnInit, OnDestroy {
   }
 
   private loadFromCache(month: string): void {
-    const cachedData = this.cache[month];
+    const cachedData = this.cache.get(month);
     if (cachedData) {
       this.events = cachedData.events;
       this.freeDays = cachedData.freeDays;
@@ -172,5 +210,6 @@ export class PlanComponent implements OnInit, OnDestroy {
     this.freeDays = [];
     this.weekends = [];
     this.isLoading = true;
+    this.errorMessage = null; // Resetowanie komunikatu o błędzie
   }
 }

@@ -1,15 +1,18 @@
-
 <div class="month-navigation">
   <button (click)="previousMonth()">← Poprzedni miesiąc</button>
   <span class="current-month">{{ formatCurrentMonth() }}</span>
   <button (click)="nextMonth()">Następny miesiąc →</button>
 </div>
 
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
+
 <div *ngIf="isLoading">
   <p>Ładowanie danych...</p>
 </div>
 
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading && !errorMessage">
   <ul *ngIf="events.length > 0 || weekends.length > 0 || freeDays.length > 0">
     <li *ngFor="let event of events" [ngStyle]="{'background-color': '#FFCDD2'}">
       <strong>{{ event.user.first_name }} {{ event.user.last_name }}</strong> - 
