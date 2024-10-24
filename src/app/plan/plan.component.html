@@ -1,7 +1,20 @@
+<!-- plan.component.html -->
+
 <div class="month-navigation">
   <button (click)="previousMonth()">← Poprzedni miesiąc</button>
   <span class="current-month">{{ formatCurrentMonth() }}</span>
   <button (click)="nextMonth()">Następny miesiąc →</button>
+</div>
+
+<!-- Legenda Kolorów -->
+<div class="shift-legend" *ngIf="shiftColorMap.size > 0">
+  <h3>Legenda Zmian:</h3>
+  <ul>
+    <li *ngFor="let shift of shiftColorMap | keyvalue">
+      <span [ngStyle]="{'background-color': shift.value}" class="legend-color"></span>
+      {{ shift.key }}
+    </li>
+  </ul>
 </div>
 
 <div class="days-header" *ngIf="false">
@@ -27,9 +40,12 @@
         </td>
         <td *ngFor="let day of daysInMonth" class="event-cell">
           <div *ngIf="schedule.get(user.id)?.get(day.format('YYYY-MM-DD')) as events">
-            <div *ngFor="let event of events" [ngClass]="getEventClass(event.type)">
+            <div *ngFor="let event of events" 
+                 [ngClass]="getEventClass(event.type)" 
+                 class="event-content"
+                 [ngStyle]="{'background-color': event.type === 'event' ? shiftColorMap.get(primaryShiftMap.get(user.id) || '') : ''}"
+                 [title]="event.type === 'event' ? event.details.shift_name : event.type === 'freeDay' ? 'Dzień wolny' : 'Weekend'">
               <span *ngIf="event.type === 'event'">
-                <!-- {{ event.details.shift_name }}:  -->
                 {{ event.details.start_time | slice:0:5 }} {{ event.details.end_time | slice:0:5 }}
               </span>
               <span *ngIf="event.type === 'freeDay'">

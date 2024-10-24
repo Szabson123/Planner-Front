@@ -34,9 +34,10 @@
 .calendar-grid th,
 .calendar-grid td {
   border: 1px solid #ddd;
-  padding: 8px;
-  max-width: 60px;
+  padding: 6px;
   position: relative;
+  text-align: center; /* Wyśrodkowanie poziome */
+  vertical-align: middle; /* Wyśrodkowanie pionowe */
 }
 
 .calendar-grid th.user-column {
@@ -57,25 +58,54 @@
   position: sticky;
   left: 0;
   z-index: 1;
+  text-align: center; /* Wyśrodkowanie poziome */
+  vertical-align: middle; /* Wyśrodkowanie pionowe */
+}
+
+.calendar-grid td.event-cell {
+  text-align: center; /* Wyśrodkowanie poziome */
+  vertical-align: middle; /* Wyśrodkowanie pionowe */
+  overflow: hidden;
 }
 
 .event {
-  background-color: #FFCDD2;
+  /* Usunięto statyczne tło, aby umożliwić dynamiczne przypisywanie kolorów */
   margin-top: 4px;
   margin-bottom: 4px;
-  padding: 2px 4px;
+  padding: 6px;
   border-radius: 4px;
-  font-size: 15px
+  font-size: 15px;
+  text-align: center;
+  display: inline-block; /* Zapewnia, że elementy nie nachodzą */
 }
 
 .free-day {
+  background-color: #C8E6C9;
+  margin-bottom: 4px;
+  padding: 2px 4px;
   border-radius: 4px;
   font-size: 0.9em;
+  text-align: center;
+  display: inline-block;
+  width: 90%;
 }
 
 .weekend {
   border-radius: 4px;
   font-size: 1.5em;
+  text-align: center;
+  display: inline-block;
+  width: 90%;
+}
+
+.weekend span,
+.free-day span {
+  font-size: 1.2em; /* Zwiększenie rozmiaru emotki */
+  vertical-align: middle; /* Wyrównanie pionowe */
+}
+
+.event-content {
+  margin: 2px 0; /* Odstępy między elementami */
 }
 
 @media (max-width: 768px) {
@@ -94,6 +124,11 @@
   .weekend {
     font-size: 0.8em;
   }
+
+  .weekend span,
+  .free-day span {
+    font-size: 1em;
+  }
 }
 
 .error-message {
@@ -105,11 +140,29 @@
   font-style: italic;
 }
 
-.weekend span {
-  font-size: 1.2em; /* Zwiększenie rozmiaru emotki */
-  vertical-align: middle; /* Wyrównanie pionowe */
+/* Legenda Kolorów */
+.shift-legend {
+  margin-bottom: 20px;
 }
-.free-day span {
-  font-size: 1.2em; /* Zwiększenie rozmiaru emotki */
-  vertical-align: middle; /* Wyrównanie pionowe */
+
+.shift-legend ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.shift-legend li {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  margin-bottom: 5px;
+}
+
+.legend-color {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  margin-right: 5px;
+  border: 1px solid #ddd;
 }

@@ -1,3 +1,5 @@
+// plan.component.ts
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlanService, Event, FreeDay, Weekend } from '../service/plan.service';
@@ -27,16 +29,36 @@ export class PlanComponent implements OnInit, OnDestroy {
   public isLoading = true;
   public errorMessage: string | null = null; 
 
-  // Nowe zmienne dla użytkowników
+  // Zmienne dla użytkowników
   public users: User[] = [];
   public isUsersLoading = true;
   public usersErrorMessage: string | null = null;
 
-  // Nowa zmienna dla dni miesiąca
+  // Zmienna dla dni miesiąca
   public daysInMonth: Dayjs[] = [];
 
-  // Nowa struktura danych dla harmonogramu
+  // Struktura danych dla harmonogramu
   public schedule: Map<number, Map<string, EventData[]>> = new Map();
+
+  // Mapa kolorów przypisanych do zmian
+  private shiftColors: string[] = [
+    '#FFCDD2', // Light Red
+    '#C8E6C9', // Light Green
+    '#B3E5FC', // Light Blue
+    '#FFF9C4', // Light Yellow
+    '#D1C4E9', // Light Purple
+    '#FFECB3', // Light Amber
+    '#B2DFDB', // Light Teal
+    '#F8BBD0', // Light Pink
+    '#DCEDC8', // Light Lime
+    '#D7CCC8'  // Light Brown
+  ];
+
+  // Mapa do przypisywania kolorów do nazw zmian
+  public shiftColorMap: Map<string, string> = new Map();
+
+  // Mapa do przechowywania głównej zmiany użytkownika
+  public primaryShiftMap: Map<number, string> = new Map();
 
   private cache: Map<string, { events: Event[], freeDays: FreeDay[], weekends: Weekend[] }> = new Map();
   private readonly CACHE_LIMIT = 12; 
@@ -299,6 +321,12 @@ export class PlanComponent implements OnInit, OnDestroy {
           });
         }
       }
+
+      // Przypisywanie głównej zmiany użytkownika
+      if (!this.primaryShiftMap.has(userId)) {
+        this.primaryShiftMap.set(userId, event.shift_name);
+        this.assignColorToShift(event.shift_name);
+      }
     });
 
     // Przypisywanie dni wolnych
@@ -329,6 +357,26 @@ export class PlanComponent implements OnInit, OnDestroy {
           });
         }
       }
+    });
+    this.sortUsersByShift();
+  }
+
+  private assignColorToShift(shiftName: string): void {
+    if (!this.shiftColorMap.has(shiftName)) {
+      if (this.shiftColorMap.size < this.shiftColors.length) {
+        this.shiftColorMap.set(shiftName, this.shiftColors[this.shiftColorMap.size]);
+      } else {
+        const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+        this.shiftColorMap.set(shiftName, randomColor);
+      }
+    }
+  }
+
+  private sortUsersByShift(): void {
+    this.users.sort((a, b) => {
+      const shiftA = this.primaryShiftMap.get(a.id) || '';
+      const shiftB = this.primaryShiftMap.get(b.id) || '';
+      return shiftA.localeCompare(shiftB);
     });
   }
 
