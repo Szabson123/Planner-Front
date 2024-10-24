@@ -1,225 +1,115 @@
-body{
-  background-color: #f5fcff;
-}
-.timeline-container {
-  overflow-x: auto;
-  padding: 10px;
-  background-color: #f5fcff;
+/* plan.component.css */
+
+.month-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-.timeline-table {
+.month-navigation button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.current-month {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.days-header {
+  display: none; /* Ukrywamy starszy nagłówek z dniami */
+}
+
+.calendar-grid {
+  overflow-x: auto; /* Pozwala na przewijanie w poziomie */
+}
+
+.calendar-grid table {
   width: 100%;
   border-collapse: collapse;
-  border-top-left-radius: 5%;
 }
 
-.timeline-table th,
-.timeline-table td {
-  border: 1px solid #ccc;
-  padding: 6px;
+.calendar-grid th,
+.calendar-grid td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  max-width: 60px;
+  position: relative;
+}
+
+.calendar-grid th.user-column {
+  position: sticky;
+  left: 0;
+  background-color: #f9f9f9;
+  z-index: 2;
+}
+
+.calendar-grid th.date-column {
+  background-color: #f1f1f1;
   text-align: center;
-  font-family: "Roboto Slab", serif;
-  font-weight: 400;
-  color: rgb(43, 43, 43);
 }
 
-.timeline-table .event-details {
-  padding: 5px;
-  border-radius: 4px;
-  margin-bottom: 2px;
-}
-
-.user-name {
-  text-align: left;
-  white-space: nowrap; 
-  font-family: "Ubuntu", sans-serif;
-  font-weight: 700;
-}
-
-.event_name{
-  text-align: left;
+.calendar-grid td.user-name {
+  background-color: #f9f9f9;
   font-weight: bold;
-  white-space: nowrap; 
-
+  position: sticky;
+  left: 0;
+  z-index: 1;
 }
 
-.event_hours{
-  text-align: center;
-  color: gray;
-  white-space: nowrap;
-  font-size: small;
+.event {
+  background-color: #FFCDD2;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 15px
 }
 
-
-/* CSS */
-.button-18 {
-  align-items: center;
-  background-color: #00aa39;
-  border: 0;
-  border-radius: 100px;
-  box-sizing: border-box;
-  color: #ffffff;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: -apple-system, system-ui, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  justify-content: center;
-  line-height: 20px;
-  max-width: 480px;
-  min-height: 40px;
-  min-width: 0px;
-  overflow: hidden;
-  padding: 0px;
-  padding-left: 20px;
-  padding-right: 20px;
-  text-align: center;
-  touch-action: manipulation;
-  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
-  user-select: none;
-  -webkit-user-select: none;
-  vertical-align: middle;
+.free-day {
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
-.button-18:hover,
-.button-18:focus { 
-  background-color: #006e25;
-  color: #ffffff;
+.weekend {
+  border-radius: 4px;
+  font-size: 1.5em;
 }
 
-.button-18:active {
-  background: #09223b;
-  color: rgb(255, 255, 255, .7);
+@media (max-width: 768px) {
+  .calendar-grid th,
+  .calendar-grid td {
+    min-width: 80px;
+    padding: 6px;
+  }
+
+  .calendar-grid td.event-cell {
+    height: 80px;
+  }
+
+  .event,
+  .free-day,
+  .weekend {
+    font-size: 0.8em;
+  }
 }
 
-.button-18:disabled { 
-  cursor: not-allowed;
-  background: rgba(0, 0, 0, .08);
-  color: rgba(0, 0, 0, .3);
-}
-.conteiner-button{
-  margin-top: 15px;
+.error-message {
+  color: red;
+  margin-top: 10px;
 }
 
-.button-18-red {
-  margin-left: 20px;
-  align-items: center;
-  background-color: #e70000;
-  border: 0;
-  border-radius: 100px;
-  box-sizing: border-box;
-  color: #ffffff;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: -apple-system, system-ui, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  justify-content: center;
-  line-height: 20px;
-  max-width: 480px;
-  min-height: 40px;
-  min-width: 0px;
-  overflow: hidden;
-  padding: 0px;
-  padding-left: 20px;
-  padding-right: 20px;
-  text-align: center;
-  touch-action: manipulation;
-  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
-  user-select: none;
-  -webkit-user-select: none;
-  vertical-align: middle;
+.isLoading {
+  font-style: italic;
 }
 
-.button-18-red:hover,
-.button-18-red:focus { 
-  background-color: #a80000;
-  color: #ffffff;
+.weekend span {
+  font-size: 1.2em; /* Zwiększenie rozmiaru emotki */
+  vertical-align: middle; /* Wyrównanie pionowe */
 }
-
-.button-18-red:active {
-  background: #09223b;
-  color: rgb(255, 255, 255, .7);
-}
-
-.button-18-red:disabled { 
-  cursor: not-allowed;
-  background: rgba(0, 0, 0, .08);
-  color: rgba(0, 0, 0, .3);
-}
-.controls{
-  margin-top: 20px;
-  margin-left: 32px;
-}
-
-.data-prev-next{
-  margin-left: 10px;
-  margin-right: 10px;
-}
-.data-title{
-  display: flex;
-  justify-content: center;
-  font-size: 30px;
-  font-weight: 500;
-  margin-bottom: 15px;
-}
-
-/* plan.component.css */
-
-.availibility-p{
-  font-size: 30px;
-}
-.free-day-p{
-  font-size: 30px;
-}
-.weekend-p{
-  padding: 0;
-  font-size: 25px;
-  margin: 0;
-}
-
-/* plan.component.css */
-/* plan.component.css */
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip::after {
-  content: attr(data-title);
-  white-space: pre; /* Zachowaj nowe linie */
-  visibility: hidden;
-  opacity: 0;
-  width: 200px;
-  background-color: #333;
-  color: #fff;
-  text-align: left;
-  border-radius: 5px;
-  padding: 5px;
-  position: absolute;
-  z-index: 10;
-  bottom: 100%; /* Pozycja tooltipa nad elementem */
-  left: 50%;
-  transform: translateX(-50%);
-  transition: opacity 0.3s;
-  font-size: 25px; /* Ustawienie rozmiaru czcionki dla tekstu w tooltipie */
-}
-
-.tooltip:hover::after {
-  visibility: visible;
-  opacity: 1;
-}
-
-/* Dodatkowe stylizacje */
-.free-day-p,
-.event-details,
-.availibility-p {
-  position: relative;
-}
-
-.free-day-p::after,
-.event-details::after,
-.availibility-p::after {
-  max-width: 400px; /* Ogranicz szerokość tooltipa */
-  font-size: 15px; /* Dodanie stylu do elementów tooltipa */
+.free-day span {
+  font-size: 1.2em; /* Zwiększenie rozmiaru emotki */
+  vertical-align: middle; /* Wyrównanie pionowe */
 }

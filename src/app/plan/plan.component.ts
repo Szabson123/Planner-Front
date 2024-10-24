@@ -1,10 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlanService, Event, FreeDay, Weekend } from '../service/plan.service';
+import { UsersService, User } from '../service/users.service';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/pl';
 import { BehaviorSubject, Subscription, EMPTY, Observable, of, forkJoin } from 'rxjs';
 import { switchMap, distinctUntilChanged, catchError, tap, debounceTime, finalize, shareReplay, retry, map } from 'rxjs/operators';
+
+export interface EventData {
+  type: 'event' | 'freeDay' | 'weekend';
+  details: any; // Możesz sprecyzować typ dla każdego rodzaju danych
+}
 
 @Component({
   selector: 'app-plan',
@@ -19,10 +25,21 @@ export class PlanComponent implements OnInit, OnDestroy {
   public weekends: Weekend[] = [];
   public currentMonth: Dayjs;
   public isLoading = true;
-  public errorMessage: string | null = null; // Dodane do obsługi błędów
+  public errorMessage: string | null = null; 
+
+  // Nowe zmienne dla użytkowników
+  public users: User[] = [];
+  public isUsersLoading = true;
+  public usersErrorMessage: string | null = null;
+
+  // Nowa zmienna dla dni miesiąca
+  public daysInMonth: Dayjs[] = [];
+
+  // Nowa struktura danych dla harmonogramu
+  public schedule: Map<number, Map<string, EventData[]>> = new Map();
 
   private cache: Map<string, { events: Event[], freeDays: FreeDay[], weekends: Weekend[] }> = new Map();
-  private readonly CACHE_LIMIT = 12; // Maksymalna liczba miesięcy w cache
+  private readonly CACHE_LIMIT = 12; 
 
   private inProgressRequests: Map<string, Observable<void>> = new Map();
 
@@ -30,45 +47,45 @@ export class PlanComponent implements OnInit, OnDestroy {
   
   private navigationSubscription!: Subscription;
   private dataFetchSubscription!: Subscription;
+  private usersSubscription!: Subscription;
   private isInitialLoad = true;
 
-  constructor(private planService: PlanService) {
+  constructor(private planService: PlanService, private usersService: UsersService) {
     this.currentMonth = this.navigationSubject.value;
   }
 
   ngOnInit(): void {
-    // Subskrypcja 1: Obsługuje nawigację i aktualizuje widok natychmiast
+    // Subskrypcja nawigacji miesięcznej
     this.navigationSubscription = this.navigationSubject.pipe(
       distinctUntilChanged((prev, curr) => prev.isSame(curr, 'month'))
     ).subscribe(newMonth => {
       this.currentMonth = newMonth;
       this.clearCurrentMonthData();
+      this.generateDaysInMonth(newMonth); // Generowanie dni miesiąca
+
       const monthStr = this.currentMonth.format('YYYY-MM');
 
       if (this.cache.has(monthStr)) {
         this.loadFromCache(monthStr);
         this.isLoading = false;
 
-        // Preładowanie sąsiadujących miesięcy tylko przy pierwszym załadowaniu
         if (this.isInitialLoad) {
           this.isInitialLoad = false;
           this.preloadAdjacentMonths(newMonth).subscribe();
         }
       } else {
         this.isLoading = true;
-        // Dane będą ładowane przez drugą subskrypcję po debounceTime
       }
     });
 
-    // Subskrypcja 2: Debounces nawigację i zarządza ładowaniem danych
+    // Subskrypcja na pobieranie danych planu
     this.dataFetchSubscription = this.navigationSubject.pipe(
-      debounceTime(300), // Debounce tylko na ładowanie danych
+      debounceTime(300), 
       distinctUntilChanged((prev, curr) => prev.isSame(curr, 'month')),
       switchMap(newMonth => {
         const monthStr = newMonth.format('YYYY-MM');
 
         if (this.cache.has(monthStr)) {
-          // Dane już są w cache, nic nie robimy
           return EMPTY;
         } else {
           return this.loadDataForMonthObservable(monthStr, true).pipe(
@@ -77,6 +94,8 @@ export class PlanComponent implements OnInit, OnDestroy {
                 this.isInitialLoad = false;
                 this.preloadAdjacentMonths(newMonth).subscribe();
               }
+              // Po załadowaniu danych, generujemy harmonogram
+              this.generateSchedule();
             })
           );
         }
@@ -88,6 +107,25 @@ export class PlanComponent implements OnInit, OnDestroy {
         return EMPTY;
       })
     ).subscribe();
+
+    // Subskrypcja na pobieranie użytkowników
+    this.usersSubscription = this.usersService.getUsers().pipe(
+      retry(2),
+      catchError(error => {
+        console.error('Błąd podczas pobierania użytkowników:', error);
+        this.usersErrorMessage = 'Wystąpił problem z załadowaniem użytkowników.';
+        this.isUsersLoading = false;
+        return EMPTY;
+      })
+    ).subscribe((users: User[]) => {
+      this.users = users;
+      this.isUsersLoading = false;
+      // Po załadowaniu użytkowników, generujemy harmonogram
+      this.generateSchedule();
+    });
+
+    // Generowanie dni dla początkowego miesiąca
+    this.generateDaysInMonth(this.currentMonth);
   }
 
   ngOnDestroy(): void {
@@ -96,6 +134,9 @@ export class PlanComponent implements OnInit, OnDestroy {
     }
     if (this.dataFetchSubscription) {
       this.dataFetchSubscription.unsubscribe();
+    }
+    if (this.usersSubscription) {
+      this.usersSubscription.unsubscribe();
     }
   }
 
@@ -109,7 +150,7 @@ export class PlanComponent implements OnInit, OnDestroy {
       freeDays: this.planService.getFreeDaysForMonth(month),
       weekends: this.planService.getWeekendsForMonth(month)
     }).pipe(
-      retry(2), // Ponów próbę 2 razy w przypadku błędu
+      retry(2), 
       tap(({ events, freeDays, weekends }) => {
         const monthDayjs = dayjs(month, 'YYYY-MM');
 
@@ -123,7 +164,6 @@ export class PlanComponent implements OnInit, OnDestroy {
           weekends: filteredWeekends
         });
 
-        // Utrzymanie limitu cache
         if (this.cache.size > this.CACHE_LIMIT) {
           const firstKey = this.cache.keys().next().value!;
           this.cache.delete(firstKey);
@@ -174,7 +214,7 @@ export class PlanComponent implements OnInit, OnDestroy {
     }
 
     return forkJoin(preloadObservables).pipe(
-      map(() => void 0), // Przekształcenie Observable<void[]> na Observable<void>
+      map(() => void 0), 
       catchError((error) => {
         console.error('Błąd podczas preładowywania sąsiadujących miesięcy:', error);
         return EMPTY;
@@ -202,6 +242,8 @@ export class PlanComponent implements OnInit, OnDestroy {
       this.events = cachedData.events;
       this.freeDays = cachedData.freeDays;
       this.weekends = cachedData.weekends;
+      // Generowanie harmonogramu po załadowaniu z cache
+      this.generateSchedule();
     }
   }
 
@@ -209,7 +251,98 @@ export class PlanComponent implements OnInit, OnDestroy {
     this.events = [];
     this.freeDays = [];
     this.weekends = [];
+    this.schedule.clear();
     this.isLoading = true;
-    this.errorMessage = null; // Resetowanie komunikatu o błędzie
+    this.errorMessage = null; 
+  }
+
+  // Metoda do generowania dni miesiąca
+  private generateDaysInMonth(month: Dayjs): void {
+    const startOfMonth = month.startOf('month');
+    const endOfMonth = month.endOf('month');
+    const days: Dayjs[] = [];
+
+    let currentDay = startOfMonth;
+
+    while (currentDay.isBefore(endOfMonth) || currentDay.isSame(endOfMonth, 'day')) {
+      days.push(currentDay);
+      currentDay = currentDay.add(1, 'day');
+    }
+
+    this.daysInMonth = days;
+  }
+
+  // Metoda do generowania harmonogramu
+  private generateSchedule(): void {
+    // Inicjalizacja pustej mapy
+    this.schedule = new Map();
+
+    // Inicjalizacja dla każdego użytkownika
+    this.users.forEach(user => {
+      const userMap: Map<string, EventData[]> = new Map();
+      this.daysInMonth.forEach(day => {
+        userMap.set(day.format('YYYY-MM-DD'), []);
+      });
+      this.schedule.set(user.id, userMap);
+    });
+
+    // Przypisywanie wydarzeń
+    this.events.forEach(event => {
+      const userId = event.user.id;
+      const date = dayjs(event.date).format('YYYY-MM-DD');
+      if (this.schedule.has(userId)) {
+        const userMap = this.schedule.get(userId)!;
+        if (userMap.has(date)) {
+          userMap.get(date)!.push({
+            type: 'event',
+            details: event
+          });
+        }
+      }
+    });
+
+    // Przypisywanie dni wolnych
+    this.freeDays.forEach(freeDay => {
+      const userId = freeDay.user.id;
+      const date = dayjs(freeDay.date).format('YYYY-MM-DD');
+      if (this.schedule.has(userId)) {
+        const userMap = this.schedule.get(userId)!;
+        if (userMap.has(date)) {
+          userMap.get(date)!.push({
+            type: 'freeDay',
+            details: freeDay
+          });
+        }
+      }
+    });
+
+    // Przypisywanie weekendów
+    this.weekends.forEach(weekend => {
+      const userId = weekend.user.id;
+      const date = dayjs(weekend.date).format('YYYY-MM-DD');
+      if (this.schedule.has(userId)) {
+        const userMap = this.schedule.get(userId)!;
+        if (userMap.has(date)) {
+          userMap.get(date)!.push({
+            type: 'weekend',
+            details: weekend
+          });
+        }
+      }
+    });
+  }
+
+  // Metoda pomocnicza do zwracania klas CSS na podstawie typu wydarzenia
+  getEventClass(type: 'event' | 'freeDay' | 'weekend'): string {
+    switch (type) {
+      case 'event':
+        return 'event';
+      case 'freeDay':
+        return 'free-day';
+      case 'weekend':
+        return 'weekend';
+      default:
+        return '';
+    }
   }
 }

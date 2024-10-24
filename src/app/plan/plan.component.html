@@ -4,35 +4,53 @@
   <button (click)="nextMonth()">Następny miesiąc →</button>
 </div>
 
+<div class="days-header" *ngIf="false">
+  <div class="day" *ngFor="let day of daysInMonth">
+    {{ day.date() }}
+  </div>
+</div>
+
+<div class="calendar-grid" *ngIf="!isLoading && !errorMessage && !isUsersLoading">
+  <table>
+    <thead>
+      <tr>
+        <th class="user-column">Użytkownik</th>
+        <th *ngFor="let day of daysInMonth" class="date-column">
+          {{ day.format('DD') }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td class="user-name">
+          {{ user.first_name }} {{ user.last_name }}
+        </td>
+        <td *ngFor="let day of daysInMonth" class="event-cell">
+          <div *ngIf="schedule.get(user.id)?.get(day.format('YYYY-MM-DD')) as events">
+            <div *ngFor="let event of events" [ngClass]="getEventClass(event.type)">
+              <span *ngIf="event.type === 'event'">
+                <!-- {{ event.details.shift_name }}:  -->
+                {{ event.details.start_time | slice:0:5 }} {{ event.details.end_time | slice:0:5 }}
+              </span>
+              <span *ngIf="event.type === 'freeDay'">
+                🌴
+              </span>
+              <span *ngIf="event.type === 'weekend'">
+                🥂
+              </span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Sekcja wyświetlania błędów -->
 <div *ngIf="errorMessage" class="error-message">
   {{ errorMessage }}
 </div>
 
 <div *ngIf="isLoading">
   <p>Ładowanie danych...</p>
-</div>
-
-<div *ngIf="!isLoading && !errorMessage">
-  <ul *ngIf="events.length > 0 || weekends.length > 0 || freeDays.length > 0">
-    <li *ngFor="let event of events" [ngStyle]="{'background-color': '#FFCDD2'}">
-      <strong>{{ event.user.first_name }} {{ event.user.last_name }}</strong> - 
-      {{ event.shift_name }}: 
-      {{ event.start_time }} - {{ event.end_time }} ({{ event.date }})
-    </li>
-
-    <li *ngFor="let freeDay of freeDays" [ngStyle]="{'background-color': '#C8E6C9'}">
-      <strong>{{ freeDay.user.first_name }} {{ freeDay.user.last_name }}</strong> - 
-      Dzień wolny: {{ freeDay.date }} - Powód: {{ freeDay.reason }}
-    </li>
-
-    <!-- Weekendy -->
-    <li *ngFor="let weekend of weekends" [ngStyle]="{'background-color': '#B3E5FC'}">
-      <strong>{{ weekend.user.first_name }} {{ weekend.user.last_name }}</strong> - 
-      Weekend: {{ weekend.date }} - Zmiana: {{ weekend.shift_name }}
-    </li>
-  </ul>
-
-  <div *ngIf="events.length === 0 && weekends.length === 0 && freeDays.length === 0">
-    <p>Brak wydarzeń do wyświetlenia.</p>
-  </div>
 </div>
