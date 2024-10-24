@@ -80,14 +80,10 @@
 }
 
 .free-day {
-  background-color: #C8E6C9;
-  margin-bottom: 4px;
-  padding: 2px 4px;
   border-radius: 4px;
-  font-size: 0.9em;
+  font-size: 1.5em;
   text-align: center;
   display: inline-block;
-  width: 90%;
 }
 
 .weekend {
@@ -95,7 +91,6 @@
   font-size: 1.5em;
   text-align: center;
   display: inline-block;
-  width: 90%;
 }
 
 .weekend span,
