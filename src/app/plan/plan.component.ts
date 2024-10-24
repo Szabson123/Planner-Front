@@ -8,6 +8,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/pl';
 import { BehaviorSubject, Subscription, EMPTY, Observable, of, forkJoin } from 'rxjs';
 import { switchMap, distinctUntilChanged, catchError, tap, debounceTime, finalize, shareReplay, retry, map } from 'rxjs/operators';
+import { TruncatePipe } from '../truncate.pipe';
 
 export interface EventData {
   type: 'event' | 'freeDay' | 'weekend';
@@ -17,7 +18,7 @@ export interface EventData {
 @Component({
   selector: 'app-plan',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TruncatePipe],
   templateUrl: './plan.component.html',
   styleUrls: ['./plan.component.css']
 })

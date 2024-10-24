@@ -36,22 +36,28 @@
     <tbody>
       <tr *ngFor="let user of users">
         <td class="user-name">
-          {{ user.first_name }} {{ user.last_name }}
+          <p style="margin: 0;" class="name">{{ user.first_name | truncate:10 }}</p> 
+          <p style="margin: 0;" class="name">{{ user.last_name | truncate:10 }}</p>
         </td>
         <td *ngFor="let day of daysInMonth" class="event-cell">
           <div *ngIf="schedule.get(user.id)?.get(day.format('YYYY-MM-DD')) as events">
             <div *ngFor="let event of events" 
                  [ngClass]="getEventClass(event.type)" 
                  class="event-content"
-                 [ngStyle]="{'background-color': event.type === 'event' ? shiftColorMap.get(primaryShiftMap.get(user.id) || '') : ''}"
-                 [title]="event.type === 'event' ? event.details.shift_name : event.type === 'freeDay' ? 'Dzień wolny' : 'Weekend'">
-              <span *ngIf="event.type === 'event'">
+                 [ngStyle]="{'background-color': event.type === 'event' ? shiftColorMap.get(primaryShiftMap.get(user.id) || '') : ''}">
+              <span *ngIf="event.type === 'event'" 
+                    class="tooltip" 
+                    [attr.data-title]="user.first_name + '\n'  + user.last_name + '\nZmiana: ' + event.details.shift_name + '\nStart: ' + (event.details.start_time | slice:0:5) + '\nKoniec: ' + (event.details.end_time | slice:0:5)">
                 {{ event.details.start_time | slice:0:5 }} {{ event.details.end_time | slice:0:5 }}
               </span>
-              <span *ngIf="event.type === 'freeDay'">
+              <span *ngIf="event.type === 'freeDay'" 
+                    class="tooltip" 
+                    [attr.data-title]="user.first_name + '\n: ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nUrlop'">
                 🌴
               </span>
-              <span *ngIf="event.type === 'weekend'">
+              <span *ngIf="event.type === 'weekend'" 
+                    class="tooltip" 
+                    [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
                 🥂
               </span>
             </div>

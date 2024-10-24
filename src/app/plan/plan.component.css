@@ -1,4 +1,3 @@
-/* plan.component.css */
 
 .month-navigation {
   display: flex;
@@ -19,15 +18,13 @@
 }
 
 .days-header {
-  display: none; /* Ukrywamy starszy nagłówek z dniami */
-}
-
-.calendar-grid {
-  overflow-x: auto; /* Pozwala na przewijanie w poziomie */
+  display: none; 
 }
 
 .calendar-grid table {
-  width: 100%;
+  min-width: 95%;
+  max-width: 95%; 
+  margin: 0 auto; 
   border-collapse: collapse;
 }
 
@@ -36,12 +33,10 @@
   border: 1px solid #ddd;
   padding: 6px;
   position: relative;
-  text-align: center; /* Wyśrodkowanie poziome */
-  vertical-align: middle; /* Wyśrodkowanie pionowe */
+  vertical-align: middle;
 }
 
 .calendar-grid th.user-column {
-  position: sticky;
   left: 0;
   background-color: #f9f9f9;
   z-index: 2;
@@ -55,28 +50,24 @@
 .calendar-grid td.user-name {
   background-color: #f9f9f9;
   font-weight: bold;
-  position: sticky;
   left: 0;
   z-index: 1;
-  text-align: center; /* Wyśrodkowanie poziome */
-  vertical-align: middle; /* Wyśrodkowanie pionowe */
+  vertical-align: middle; /
 }
 
 .calendar-grid td.event-cell {
-  text-align: center; /* Wyśrodkowanie poziome */
-  vertical-align: middle; /* Wyśrodkowanie pionowe */
-  overflow: hidden;
+  text-align: center; 
+  vertical-align: middle; 
+  position: relative;
 }
-
 .event {
-  /* Usunięto statyczne tło, aby umożliwić dynamiczne przypisywanie kolorów */
   margin-top: 4px;
   margin-bottom: 4px;
   padding: 6px;
   border-radius: 4px;
   font-size: 15px;
   text-align: center;
-  display: inline-block; /* Zapewnia, że elementy nie nachodzą */
+  display: inline-block; 
 }
 
 .free-day {
@@ -95,12 +86,12 @@
 
 .weekend span,
 .free-day span {
-  font-size: 1.2em; /* Zwiększenie rozmiaru emotki */
-  vertical-align: middle; /* Wyrównanie pionowe */
+  font-size: 1.2em;
+  vertical-align: middle; 
 }
 
 .event-content {
-  margin: 2px 0; /* Odstępy między elementami */
+  margin: 2px 0; 
 }
 
 @media (max-width: 768px) {
@@ -135,9 +126,9 @@
   font-style: italic;
 }
 
-/* Legenda Kolorów */
 .shift-legend {
   margin-bottom: 20px;
+  margin-left: 60px;
 }
 
 .shift-legend ul {
@@ -160,4 +151,52 @@
   display: inline-block;
   margin-right: 5px;
   border: 1px solid #ddd;
+}
+.tooltip {
+  position: relative;
+  cursor: pointer;
+  z-index: 1001; 
+}
+
+.tooltip::after {
+  content: attr(data-title);
+  position: absolute;
+  bottom: 125%; 
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 1);
+  color: #fff;
+  border-radius: 4px;
+  white-space: pre-line; 
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 1000; 
+  width: max-content;
+  max-width: 200px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 115%; 
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.75) transparent;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.tooltip:hover::after,
+.tooltip:hover::before {
+  opacity: 1;
+  visibility: visible;
 }
