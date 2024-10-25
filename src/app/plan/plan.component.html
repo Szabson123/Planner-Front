@@ -59,7 +59,12 @@
                     class="tooltip" 
                     [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
                 🥂
-              </span>
+            </span>
+              <span *ngIf="event.type === 'holyday'" 
+              class="tooltip" 
+              [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
+              🙏
+        </span>
             </div>
           </div>
         </td>

@@ -27,6 +27,12 @@ export interface FreeDay {
   reason: string;
 }
 
+export interface HolyDay {
+  user: User;
+  date: string;
+  name: string;
+}
+
 export interface Availability {
   user?: any;
   date: string;
@@ -58,7 +64,12 @@ export class PlanService {
   getFreeDays(): Observable<FreeDay[]> {
     return this.http.get<FreeDay[]>(`${this.apiUrl}/free_day/`);
   }
-
+  getHolyDay(): Observable<HolyDay[]> {
+    return this.http.get<HolyDay[]>(`${this.apiUrl}/holyday/`);
+  }
+  getHolyDayForMonth(month: string): Observable<HolyDay[]> {
+    return this.http.get<HolyDay[]>(`${this.apiUrl}/holyday/?month=${month}`);
+  }
   getEventsForMonth(month: string): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.apiUrl}/events/?month=${month}`);
   }

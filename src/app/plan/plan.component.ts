@@ -2,7 +2,7 @@
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlanService, Event, FreeDay, Weekend } from '../service/plan.service';
+import { PlanService, Event, FreeDay, Weekend, HolyDay } from '../service/plan.service';
 import { UsersService, User } from '../service/users.service';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/pl';
@@ -11,7 +11,7 @@ import { switchMap, distinctUntilChanged, catchError, tap, debounceTime, finaliz
 import { TruncatePipe } from '../truncate.pipe';
 
 export interface EventData {
-  type: 'event' | 'freeDay' | 'weekend';
+  type: 'event' | 'freeDay' | 'weekend' | 'holyday';
   details: any; // Możesz sprecyzować typ dla każdego rodzaju danych
 }
 
@@ -26,6 +26,7 @@ export class PlanComponent implements OnInit, OnDestroy {
   public events: Event[] = [];
   public freeDays: FreeDay[] = [];
   public weekends: Weekend[] = [];
+  public holydays: HolyDay[] = [];
   public currentMonth: Dayjs;
   public isLoading = true;
   public errorMessage: string | null = null; 
@@ -61,7 +62,7 @@ export class PlanComponent implements OnInit, OnDestroy {
   // Mapa do przechowywania głównej zmiany użytkownika
   public primaryShiftMap: Map<number, string> = new Map();
 
-  private cache: Map<string, { events: Event[], freeDays: FreeDay[], weekends: Weekend[] }> = new Map();
+  private cache: Map<string, { events: Event[], freeDays: FreeDay[], weekends: Weekend[], holydays: HolyDay[] }> = new Map();
   private readonly CACHE_LIMIT = 12; 
 
   private inProgressRequests: Map<string, Observable<void>> = new Map();
@@ -180,20 +181,23 @@ export class PlanComponent implements OnInit, OnDestroy {
     const load$ = forkJoin({
       events: this.planService.getEventsForMonth(month),
       freeDays: this.planService.getFreeDaysForMonth(month),
-      weekends: this.planService.getWeekendsForMonth(month)
+      weekends: this.planService.getWeekendsForMonth(month),
+      holydays: this.planService.getHolyDayForMonth(month)
     }).pipe(
       retry(2), 
-      tap(({ events, freeDays, weekends }) => {
+      tap(({ events, freeDays, weekends, holydays}) => {
         const monthDayjs = dayjs(month, 'YYYY-MM');
 
         const filteredEvents = events.filter(event => dayjs(event.date).isSame(monthDayjs, 'month'));
         const filteredFreeDays = freeDays.filter(freeDay => dayjs(freeDay.date).isSame(monthDayjs, 'month'));
         const filteredWeekends = weekends.filter(weekend => dayjs(weekend.date).isSame(monthDayjs, 'month'));
+        const filteredHolydays = holydays.filter(holyday => dayjs(holyday.date).isSame(monthDayjs, 'month'));
 
         this.cache.set(month, {
           events: filteredEvents,
           freeDays: filteredFreeDays,
-          weekends: filteredWeekends
+          weekends: filteredWeekends,
+          holydays: filteredHolydays
         });
 
         if (this.cache.size > this.CACHE_LIMIT) {
@@ -205,6 +209,7 @@ export class PlanComponent implements OnInit, OnDestroy {
           this.events = filteredEvents;
           this.freeDays = filteredFreeDays;
           this.weekends = filteredWeekends;
+          this.holydays = filteredHolydays;
           this.isLoading = false;
         }
       }),
@@ -274,6 +279,7 @@ export class PlanComponent implements OnInit, OnDestroy {
       this.events = cachedData.events;
       this.freeDays = cachedData.freeDays;
       this.weekends = cachedData.weekends;
+      this.holydays = cachedData.holydays;
       // Generowanie harmonogramu po załadowaniu z cache
       this.generateSchedule();
     }
@@ -283,6 +289,7 @@ export class PlanComponent implements OnInit, OnDestroy {
     this.events = [];
     this.freeDays = [];
     this.weekends = [];
+    this.holydays = [];
     this.schedule.clear();
     this.isLoading = true;
     this.errorMessage = null; 
@@ -308,7 +315,6 @@ export class PlanComponent implements OnInit, OnDestroy {
   private generateSchedule(): void {
     // Inicjalizacja pustej mapy
     this.schedule = new Map();
-
     // Inicjalizacja dla każdego użytkownika
     this.users.forEach(user => {
       const userMap: Map<string, EventData[]> = new Map();
@@ -317,7 +323,6 @@ export class PlanComponent implements OnInit, OnDestroy {
       });
       this.schedule.set(user.id, userMap);
     });
-
     // Przypisywanie wydarzeń
     this.events.forEach(event => {
       const userId = event.user.id;
@@ -331,14 +336,12 @@ export class PlanComponent implements OnInit, OnDestroy {
           });
         }
       }
-
       // Przypisywanie głównej zmiany użytkownika
       if (!this.primaryShiftMap.has(userId)) {
         this.primaryShiftMap.set(userId, event.shift_name);
         this.assignColorToShift(event.shift_name);
       }
     });
-
     // Przypisywanie dni wolnych
     this.freeDays.forEach(freeDay => {
       const userId = freeDay.user.id;
@@ -353,7 +356,6 @@ export class PlanComponent implements OnInit, OnDestroy {
         }
       }
     });
-
     // Przypisywanie weekendów
     this.weekends.forEach(weekend => {
       const userId = weekend.user.id;
@@ -368,6 +370,22 @@ export class PlanComponent implements OnInit, OnDestroy {
         }
       }
     });
+  
+    // **Przypisywanie świąt (holydays)**
+    this.holydays.forEach(holyday => {
+      const userId = holyday.user.id;
+      const date = dayjs(holyday.date).format('YYYY-MM-DD');
+      if (this.schedule.has(userId)) {
+        const userMap = this.schedule.get(userId)!;
+        if (userMap.has(date)) {
+          userMap.get(date)!.push({
+            type: 'holyday',
+            details: holyday
+          });
+        }
+      }
+    });
+  
     this.sortUsersByShift();
   }
 
@@ -391,7 +409,7 @@ export class PlanComponent implements OnInit, OnDestroy {
   }
 
   // Metoda pomocnicza do zwracania klas CSS na podstawie typu wydarzenia
-  getEventClass(type: 'event' | 'freeDay' | 'weekend'): string {
+  getEventClass(type: 'event' | 'freeDay' | 'weekend' | 'holyday'): string {
     switch (type) {
       case 'event':
         return 'event';
@@ -399,6 +417,8 @@ export class PlanComponent implements OnInit, OnDestroy {
         return 'free-day';
       case 'weekend':
         return 'weekend';
+      case 'holyday':
+        return 'holyday';
       default:
         return '';
     }
