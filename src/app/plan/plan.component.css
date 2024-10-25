@@ -66,8 +66,8 @@ body{
 .event {
   margin-top: 4px;
   margin-bottom: 4px;
-  padding: 6px;
-  border-radius: 4px;
+  padding: 5px;
+  border-radius: 8px;
   font-size: 15px;
   text-align: center;
   display: inline-block; 
@@ -87,9 +87,17 @@ body{
   display: inline-block;
 }
 
+.holyday {
+  border-radius: 4px;
+  font-size: 1.5em;
+  text-align: center;
+  display: inline-block;
+}
+
 .weekend span,
-.free-day span {
-  font-size: 1.2em;
+.free-day span,
+.holyday span {
+  font-size: 1em;
   vertical-align: middle; 
 }
 
