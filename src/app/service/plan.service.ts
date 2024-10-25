@@ -9,6 +9,8 @@ export interface Event {
   shift_name: string;
   start_time: string;
   end_time: string;
+  overtime: number;
+  count_hours: number; 
 }
 
 export interface Shift {

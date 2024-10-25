@@ -163,6 +163,15 @@ export class PlanComponent implements OnInit, OnDestroy {
     }
   }
 
+  public calculateUserTotalHours(userId: number): number {
+    const userEvents = this.events.filter(event => event.user.id === userId);
+    return userEvents.reduce((sum, event) => sum + (event.count_hours || 0), 0);
+  }
+
+  public calculateUserTotalEvents(userId: number): number {
+    return this.events.filter(event => event.user.id === userId).length;
+  }
+
   private loadDataForMonthObservable(month: string, isCurrentMonth: boolean = false): Observable<void> {
     if (this.inProgressRequests.has(month)) {
       return this.inProgressRequests.get(month)!;

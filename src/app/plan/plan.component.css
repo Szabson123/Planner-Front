@@ -1,3 +1,6 @@
+body{
+  margin: 120vh;
+}
 
 .month-navigation {
   display: flex;
@@ -52,7 +55,7 @@
   font-weight: bold;
   left: 0;
   z-index: 1;
-  vertical-align: middle; /
+  vertical-align: middle; 
 }
 
 .calendar-grid td.event-cell {
