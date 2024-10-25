@@ -78,6 +78,10 @@
     </tbody>
   </table>
 </div>
+<div *ngIf="isNextMonth()">
+  <button class="button-18" (click)="generatePlanner()">Generate Planner</button>
+  <button class="button-18-red" (click)="restorePlanner()">Restore Planner</button>
+</div>
 
 <!-- Sekcja wyświetlania błędów -->
 <div *ngIf="errorMessage" class="error-message">

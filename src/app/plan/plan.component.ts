@@ -423,4 +423,48 @@ export class PlanComponent implements OnInit, OnDestroy {
         return '';
     }
   }
+
+  private refreshCurrentMonthData(): void {
+    const currentMonthStr = this.currentMonth.format('YYYY-MM');
+    this.isLoading = true;
+    this.loadDataForMonthObservable(currentMonthStr, true).subscribe({
+      next: () => {
+        this.generateSchedule(); 
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Błąd podczas odświeżania danych:', error);
+        this.errorMessage = 'Wystąpił problem z odświeżeniem danych.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  public generatePlanner(): void {
+    this.planService.generatePlanner().subscribe({
+      next: (res) => {
+        console.log('Planner generated successfully', res);
+        this.refreshCurrentMonthData();
+      },
+      error: (e) => {
+        console.error('Error generating planner', e);
+      }
+    });
+  }
+
+  public restorePlanner(): void {
+    this.planService.restorePlanner().subscribe({
+      next: (res) => {
+        console.log('Planner restored successfully', res);
+        this.refreshCurrentMonthData();
+      },
+      error: (e) => {
+        console.error('Error restoring planner', e);
+      }
+    });
+  }
+  public isNextMonth(): boolean {
+    return this.currentMonth.isSame(dayjs().add(1, 'month').startOf('month'), 'month');
+  }
+
 }
