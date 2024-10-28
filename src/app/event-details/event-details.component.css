@@ -1,0 +1,114 @@
+.event-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin: 40px auto;
+  }
+  
+  /* Tytuł */
+  .event-title {
+    font-family: var(--font-primary);
+    color: var(--primary-blue);
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--secondary-blue);
+    padding-bottom: 10px;
+  }
+  
+  /* Informacje o wydarzeniu */
+  .event-info {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+  }
+  
+  .label {
+    font-weight: bold;
+    color: var(--primary-blue);
+  }
+  
+  /* Sekcja nadgodzin */
+  .overtime-section {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .overtime-label {
+    flex: 1;
+    font-weight: bold;
+    color: var(--dark-gray);
+  }
+  
+  .overtime-input {
+    width: 80px;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid var(--secondary-blue);
+    border-radius: 5px;
+    transition: border-color 0.3s;
+  }
+  
+  .overtime-input:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+  }
+  
+  .overtime-button {
+    padding: 8px 16px;
+    background-color: var(--primary-blue);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: var(--font-primary);
+  }
+  
+  .overtime-button:hover {
+    background-color: var(--secondary-blue);
+  }
+  
+  /* Wiadomość o nadgodzinach */
+  .overtime-message {
+    color: var(--primary-blue);
+    margin-top: 10px;
+    font-style: italic;
+  }
+  
+  /* Wiadomość błędu */
+  .error-message {
+    color: var(--error-red);
+    text-align: center;
+    font-weight: bold;
+    margin: 40px;
+    font-size: 1.2em;
+  }
+  
+  /* Responsywność */
+  @media (max-width: 600px) {
+    .event-container {
+      padding: 20px;
+      margin: 20px;
+    }
+  
+    .event-title {
+      font-size: 1.5em;
+    }
+  
+    .overtime-section {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .overtime-input {
+      margin: 10px 0;
+      width: 100%;
+    }
+  
+    .overtime-button {
+      width: 100%;
+    }
+  }

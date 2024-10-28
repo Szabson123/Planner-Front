@@ -1,34 +1,55 @@
-<div *ngIf="eventDetail; else errorTemplate">
-    <h2>Szczegóły Wydarzenia</h2>
-    <p><strong>Data:</strong> {{ eventDetail.date }}</p>
+<div class="event-container" *ngIf="eventDetail; else errorTemplate">
+    <h2 class="event-title">Szczegóły Wydarzenia</h2>
+    
+    <!-- Informacje podstawowe -->
+    <div class="event-info">
+      <span class="label">Data:</span> {{ eventDetail.date }}
+    </div>
+    
+    <div class="event-info">
+      <span class="label">Użytkownik:</span> {{ eventDetail.user.first_name }} {{ eventDetail.user.last_name }}
+    </div>
   
     <!-- Szczegóły dla Event -->
     <ng-container *ngIf="isEvent(eventDetail)">
-      <p><strong>Zmiana:</strong> {{ eventDetail.shift_name }}</p>
-      <p><strong>Start:</strong> {{ eventDetail.start_time }}</p>
-      <p><strong>Koniec:</strong> {{ eventDetail.end_time }}</p>
-      <p><strong>Nadgodziny:</strong> {{ eventDetail.overtime || 'Brak' }}</p>
-  
-      <div>
-        <label for="overtime">Dodaj Nadgodziny:</label>
-        <input type="number" [(ngModel)]="overtime" name="overtime" id="overtime" min="0" />
-        <button (click)="onAddOvertime()">Dodaj Nadgodziny</button>
+      <div class="event-info">
+        <span class="label">Typ zmiany:</span> Dzień pracujący
+        </div>
+      <div class="event-info">
+        <span class="label">Zmiana:</span> {{ eventDetail.shift_name }}
       </div>
-      <p *ngIf="overtimeMessage">{{ overtimeMessage }}</p>
+      <div class="event-info">
+        <span class="label">Start:</span> {{ eventDetail.start_time }}
+      </div>
+      <div class="event-info">
+        <span class="label">Koniec:</span> {{ eventDetail.end_time }}
+      </div>
+      <div class="event-info">
+        <span class="label">Nadgodziny:</span> {{ eventDetail.overtime || 'Brak' }}
+      </div>
+  
+      <div class="overtime-section">
+        <label for="overtime" class="overtime-label">Dodaj Nadgodziny:</label>
+        <input type="number" [(ngModel)]="overtime" name="overtime" id="overtime" min="0" class="overtime-input" />
+        <button (click)="onAddOvertime()" class="overtime-button">Dodaj</button>
+      </div>
+      <p *ngIf="overtimeMessage" class="overtime-message">{{ overtimeMessage }}</p>
     </ng-container>
   
-    <!-- Szczegóły dla FreeDay -->
     <ng-container *ngIf="isFreeDay(eventDetail)">
-      <p><strong>Powód:</strong> {{ eventDetail.reason }}</p>
+      <div class="event-info">
+        <span class="label">Powód:</span> {{ eventDetail.reason }}
+      </div>
     </ng-container>
   
-    <!-- Szczegóły dla Weekend -->
     <ng-container *ngIf="isWeekend(eventDetail)">
-      <p><strong>Zmiana:</strong> {{ eventDetail.shift_name }}</p>
+        <div class="event-info">
+            <span class="label">Typ:</span> Weekend
+        </div>
     </ng-container>
   </div>
   
   <ng-template #errorTemplate>
-    <p>{{ errorMessage }}</p>
+    <p class="error-message">{{ errorMessage }}</p>
   </ng-template>
   
