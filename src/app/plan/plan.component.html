@@ -52,12 +52,16 @@
               <span *ngIf="event.type === 'freeDay'" 
                     class="tooltip" 
                     [attr.data-title]="user.first_name + '\n' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nUrlop'">
-                🌴
+                <a [routerLink]="['/details', 'freeDay', event.details.id]">
+                  🌴
+                </a>
               </span>
               <span *ngIf="event.type === 'weekend'" 
                     class="tooltip" 
-                    [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
-                🥂
+                    [attr.data-title]="user.first_name + '\n' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
+                <a [routerLink]="['/details', 'weekend', event.details.id]">
+                  🥂
+                </a>
               </span>
               <span *ngIf="event.type === 'holyday'" 
                     class="tooltip" 
