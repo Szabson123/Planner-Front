@@ -111,4 +111,17 @@ export class PlanService {
   addShift(shift: Shift): Observable<Shift> {
     return this.http.post<Shift>(`${this.apiUrl}/shifts/`, shift)
   }
+  
+  // Metody pobierania szczegółów dla poszczególnych typów
+  getEventById(id: number): Observable<Event> {
+    return this.http.get<Event>(`${this.apiUrl}/events/${id}/`);
+  }
+
+  getFreeDayById(id: number): Observable<FreeDay> {
+    return this.http.get<FreeDay>(`${this.apiUrl}/free_day/${id}/`);
+  }
+
+  getWeekendById(id: number): Observable<Weekend> {
+    return this.http.get<Weekend>(`${this.apiUrl}/weekend/${id}/`);
+  }
 }

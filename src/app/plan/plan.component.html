@@ -39,13 +39,15 @@
             [ngStyle]="{
               'background-color': 
                 event.type === 'event' 
-                ? (user.is_central ? shiftColorMap.get('Central User') : shiftColorMap.get(primaryShiftMap.get(user.id) || '')) 
+                ? (user.is_central ? shiftColorMap.get('Zmiana centralna') : shiftColorMap.get(primaryShiftMap.get(user.id) || '')) 
                 : 'transparent'
               }">
               <span *ngIf="event.type === 'event'" 
                     class="tooltip" 
-                    [attr.data-title]="user.first_name + '\n'  + user.last_name + '\nZmiana: ' + event.details.shift_name + '\nStart: ' + (event.details.start_time | slice:0:5) + '\nKoniec: ' + (event.details.end_time | slice:0:5)">
-                {{ event.details.start_time | slice:0:5 }} {{ event.details.end_time | slice:0:5 }}
+                    [attr.data-title]="user.first_name + '\n' + user.last_name + '\nZmiana: ' + event.details.shift_name + '\nStart: ' + (event.details.start_time | slice:0:5) + '\nKoniec: ' + (event.details.end_time | slice:0:5)">
+                <a [routerLink]="['/details', 'event', event.details.id]">
+                  {{ event.details.start_time | slice:0:5 }} {{ event.details.end_time | slice:0:5 }}
+                </a>
               </span>
               <span *ngIf="event.type === 'freeDay'" 
                     class="tooltip" 

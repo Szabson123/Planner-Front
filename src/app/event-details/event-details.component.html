@@ -1,0 +1,26 @@
+<div *ngIf="eventDetail; else errorTemplate">
+    <h2>Szczegóły</h2>
+    <p *ngIf="eventDetail.date"><strong>Data:</strong> {{ eventDetail.date }}</p>
+    
+    <!-- Wyświetlanie szczegółów specyficznych dla Event -->
+    <ng-container *ngIf="isEvent(eventDetail)">
+      <p><strong>Zmiana:</strong> {{ eventDetail.shift_name }}</p>
+      <p><strong>Start:</strong> {{ eventDetail.start_time }}</p>
+      <p><strong>Koniec:</strong> {{ eventDetail.end_time }}</p>
+    </ng-container>
+    
+    <!-- Wyświetlanie szczegółów specyficznych dla FreeDay -->
+    <ng-container *ngIf="isFreeDay(eventDetail)">
+      <p><strong>Powód:</strong> {{ eventDetail.reason }}</p>
+    </ng-container>
+    
+    <!-- Wyświetlanie szczegółów specyficznych dla Weekend -->
+    <ng-container *ngIf="isWeekend(eventDetail)">
+      <p><strong>Zmiana:</strong> {{ eventDetail.shift_name }}</p>
+    </ng-container>
+  </div>
+  
+  <ng-template #errorTemplate>
+    <p>{{ errorMessage }}</p>
+  </ng-template>
+  

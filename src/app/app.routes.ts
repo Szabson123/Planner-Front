@@ -18,21 +18,28 @@ export const routes: Routes = [
   },
 
   {
-    path: 'avaibility',
+    path: 'availability',
     component: AvailabilityComponent
   },
 
-  { path: 'free_days', 
+  { 
+    path: 'free_days', 
     component: FreeDaysComponent
   },
 
-  { path: 'shifts', 
+  { 
+    path: 'shifts', 
     component: ShiftsComponent
   },
   
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent },
+
+  { 
+    path: 'details/:type/:id', 
+    loadComponent: () => import('./event-details/event-details.component').then(m => m.EventDetailsComponent) 
+  },
 
   { path: '', redirectTo: '/plan', pathMatch: 'full' },
   { path: '**', redirectTo: '/plan' }

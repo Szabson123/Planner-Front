@@ -4,6 +4,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlanService, Event, FreeDay, Weekend, HolyDay } from '../service/plan.service';
 import { UsersService, User } from '../service/users.service';
+import { RouterModule } from '@angular/router';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/pl';
 import { BehaviorSubject, Subscription, EMPTY, Observable, of, forkJoin } from 'rxjs';
@@ -18,7 +19,7 @@ export interface EventData {
 @Component({
   selector: 'app-plan',
   standalone: true,
-  imports: [CommonModule, TruncatePipe],
+  imports: [CommonModule, TruncatePipe, RouterModule],
   templateUrl: './plan.component.html',
   styleUrls: ['./plan.component.css']
 })
@@ -47,7 +48,6 @@ export class PlanComponent implements OnInit, OnDestroy {
     '#FFCDD2', // Light Red
     '#C8E6C9', // Light Green
     '#B3E5FC', // Light Blue
-    '#FFF9C4', // Light Yellow
     '#D1C4E9', // Light Purple
     '#FFECB3', // Light Amber
     '#B2DFDB', // Light Teal
@@ -400,7 +400,7 @@ export class PlanComponent implements OnInit, OnDestroy {
     }
     // Przypisanie koloru do centralnych użytkowników, jeśli jeszcze go nie ma
     if (!this.shiftColorMap.has("Central User")) {
-      this.shiftColorMap.set("Central User", "#FFD700"); // Na przykład złoty kolor
+      this.shiftColorMap.set("Zmiana centralna", "#FFD700"); 
     }
   }
 

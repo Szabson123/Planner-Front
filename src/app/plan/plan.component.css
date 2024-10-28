@@ -6,6 +6,11 @@ h3{
   margin: 0;
 }
 
+a{
+  text-decoration: none;
+  color: black;
+}
+
 .month-navigation {
   display: flex;
   align-items: center;
