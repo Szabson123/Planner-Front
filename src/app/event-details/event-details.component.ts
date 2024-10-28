@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PlanService, Event, FreeDay, Weekend } from '../service/plan.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-event-details',
@@ -15,17 +16,18 @@ import { FormsModule } from '@angular/forms';
 export class EventDetailsComponent implements OnInit {
   eventDetail: Event | FreeDay | Weekend | null = null;
   errorMessage: string | null = null;
-  overtime: number = 0; // Zmienna do przechowywania wprowadzonej wartości nadgodzin
-  overtimeMessage: string | null = null; // Wiadomość potwierdzenia lub błędu
+  overtime: number = 0; 
+  overtimeMessage: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private planService: PlanService
+    private planService: PlanService,
+    private router: Router 
   ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    const type = this.route.snapshot.paramMap.get('type'); // np. "event", "freeDay" lub "weekend"
+    const type = this.route.snapshot.paramMap.get('type'); 
 
     if (type === 'event') {
       this.planService.getEventById(id).subscribe({
@@ -64,19 +66,33 @@ export class EventDetailsComponent implements OnInit {
       }
     });
   }
+  onChangeEventToFreeDay(): void {
+    if (this.eventDetail) {
+      const reason = prompt('Podaj powód zmiany na dzień wolny:', 'Brak powodu');
+      if (reason === null) {
+        return;
+      }
+      
+      this.planService.changeEventToFreeDay(this.eventDetail.id, reason).subscribe(
+        (response: any) => {
+          this.router.navigate(['/plan']);
+        },
+        (error: HttpErrorResponse) => {
+          this.errorMessage = error.error.error || 'Nie udało się zmienić wydarzenia na dzień wolny.';
+        }
+      );
+    }
+  }
 
-  // Type guard dla event
   isEvent(detail: Event | FreeDay | Weekend): detail is Event {
-    return (detail as Event).start_time !== undefined && (detail as Event).end_time !== undefined;
+    return 'start_time' in detail && 'end_time' in detail;
   }
-
-  // Type guard dla freeDay
+  
   isFreeDay(detail: Event | FreeDay | Weekend): detail is FreeDay {
-    return (detail as FreeDay).reason !== undefined;
+    return 'reason' in detail;
   }
-
-  // Type guard dla weekend
+  
   isWeekend(detail: Event | FreeDay | Weekend): detail is Weekend {
-    return (detail as Weekend).shift_name !== undefined && (detail as Weekend).date !== undefined;
+    return 'shift_name' in detail && !this.isEvent(detail) && !this.isFreeDay(detail);
   }
 }

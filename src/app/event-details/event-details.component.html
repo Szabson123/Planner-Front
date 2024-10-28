@@ -1,7 +1,8 @@
+<!-- event-detail.component.html -->
+
 <div class="event-container" *ngIf="eventDetail; else errorTemplate">
     <h2 class="event-title">Szczegóły Wydarzenia</h2>
     
-    <!-- Informacje podstawowe -->
     <div class="event-info">
       <span class="label">Data:</span> {{ eventDetail.date }}
     </div>
@@ -10,11 +11,10 @@
       <span class="label">Użytkownik:</span> {{ eventDetail.user.first_name }} {{ eventDetail.user.last_name }}
     </div>
   
-    <!-- Szczegóły dla Event -->
     <ng-container *ngIf="isEvent(eventDetail)">
       <div class="event-info">
         <span class="label">Typ zmiany:</span> Dzień pracujący
-        </div>
+      </div>
       <div class="event-info">
         <span class="label">Zmiana:</span> {{ eventDetail.shift_name }}
       </div>
@@ -34,6 +34,8 @@
         <button (click)="onAddOvertime()" class="overtime-button">Dodaj</button>
       </div>
       <p *ngIf="overtimeMessage" class="overtime-message">{{ overtimeMessage }}</p>
+      
+      <button (click)="onChangeEventToFreeDay()" class="change-freeday-button">Zmień na dzień wolny</button>
     </ng-container>
   
     <ng-container *ngIf="isFreeDay(eventDetail)">

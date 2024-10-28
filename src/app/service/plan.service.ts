@@ -23,6 +23,7 @@ export interface Shift {
 }
 
 export interface FreeDay {
+  id: number;
   user: User;
   date: string;
   reason: string;
@@ -41,6 +42,7 @@ export interface Availability {
 }
 
 export interface Weekend {
+  id: number;
   user: User;
   date: string;
   shift_name: string;
@@ -127,5 +129,9 @@ export class PlanService {
   }
   addOvertime(id: number, overtime: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/events/${id}/add_overtime/`, { overtime });
+  }
+  changeEventToFreeDay(id: number, reason?: string): Observable<any> {
+    const payload = { reason };
+    return this.http.post(`${this.apiUrl}/events/${id}/change_event_to_freeday/`, payload);
   }
 }

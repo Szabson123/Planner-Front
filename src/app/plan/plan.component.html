@@ -45,7 +45,7 @@
                        ? (user.is_central ? shiftColorMap.get('Zmiana centralna') : shiftColorMap.get(primaryShiftMap.get(user.id) || '')) 
                        : 'transparent'
                      }">
-                <span *ngIf="event.type === 'event' && event.details.overtime > 0" 
+                <span *ngIf="event.type === 'event' && event.details.overtime != 0" 
                       class="overtime-dot"></span>
 
                 <span *ngIf="event.type === 'event'" 
