@@ -1,5 +1,3 @@
-<!-- plan.component.html -->
-
 <div class="month-navigation">
   <button (click)="previousMonth()">← Poprzedni miesiąc</button>
   <span class="current-month">{{ formatCurrentMonth() }}</span>
@@ -15,12 +13,6 @@
       {{ shift.key }}
     </li>
   </ul>
-</div>
-
-<div class="days-header" *ngIf="false">
-  <div class="day" *ngFor="let day of daysInMonth">
-    {{ day.date() }}
-  </div>
 </div>
 
 <div class="calendar-grid" *ngIf="!isLoading && !errorMessage && !isUsersLoading">
@@ -42,9 +34,14 @@
         <td *ngFor="let day of daysInMonth" class="event-cell">
           <div *ngIf="schedule.get(user.id)?.get(day.format('YYYY-MM-DD')) as events">
             <div *ngFor="let event of events" 
-                 [ngClass]="getEventClass(event.type)" 
-                 class="event-content"
-                 [ngStyle]="{'background-color': event.type === 'event' ? shiftColorMap.get(primaryShiftMap.get(user.id) || '') : ''}">
+            [ngClass]="getEventClass(event.type)" 
+            class="event-content"
+            [ngStyle]="{
+              'background-color': 
+                event.type === 'event' 
+                ? (user.is_central ? shiftColorMap.get('Central User') : shiftColorMap.get(primaryShiftMap.get(user.id) || '')) 
+                : 'transparent'
+              }">
               <span *ngIf="event.type === 'event'" 
                     class="tooltip" 
                     [attr.data-title]="user.first_name + '\n'  + user.last_name + '\nZmiana: ' + event.details.shift_name + '\nStart: ' + (event.details.start_time | slice:0:5) + '\nKoniec: ' + (event.details.end_time | slice:0:5)">
@@ -52,19 +49,19 @@
               </span>
               <span *ngIf="event.type === 'freeDay'" 
                     class="tooltip" 
-                    [attr.data-title]="user.first_name + '\n: ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nUrlop'">
+                    [attr.data-title]="user.first_name + '\n' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nUrlop'">
                 🌴
               </span>
               <span *ngIf="event.type === 'weekend'" 
                     class="tooltip" 
                     [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
                 🥂
-            </span>
+              </span>
               <span *ngIf="event.type === 'holyday'" 
-              class="tooltip" 
-              [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
-              🙏
-        </span>
+                    class="tooltip" 
+                    [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nŚwięto'">
+                🙏
+              </span>
             </div>
           </div>
         </td>

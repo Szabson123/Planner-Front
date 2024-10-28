@@ -104,7 +104,7 @@ export class PlanComponent implements OnInit, OnDestroy {
 
     // Subskrypcja na pobieranie danych planu
     this.dataFetchSubscription = this.navigationSubject.pipe(
-      debounceTime(300), 
+      debounceTime(1), 
       distinctUntilChanged((prev, curr) => prev.isSame(curr, 'month')),
       switchMap(newMonth => {
         const monthStr = newMonth.format('YYYY-MM');
@@ -390,13 +390,17 @@ export class PlanComponent implements OnInit, OnDestroy {
   }
 
   private assignColorToShift(shiftName: string): void {
-    if (!this.shiftColorMap.has(shiftName)) {
+    if (shiftName && !this.shiftColorMap.has(shiftName)) {
       if (this.shiftColorMap.size < this.shiftColors.length) {
         this.shiftColorMap.set(shiftName, this.shiftColors[this.shiftColorMap.size]);
       } else {
-        const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+        const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
         this.shiftColorMap.set(shiftName, randomColor);
       }
+    }
+    // Przypisanie koloru do centralnych użytkowników, jeśli jeszcze go nie ma
+    if (!this.shiftColorMap.has("Central User")) {
+      this.shiftColorMap.set("Central User", "#FFD700"); // Na przykład złoty kolor
     }
   }
 
