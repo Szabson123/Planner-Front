@@ -1,20 +1,28 @@
 <div *ngIf="eventDetail; else errorTemplate">
-    <h2>Szczegóły</h2>
-    <p *ngIf="eventDetail.date"><strong>Data:</strong> {{ eventDetail.date }}</p>
-    
-    <!-- Wyświetlanie szczegółów specyficznych dla Event -->
+    <h2>Szczegóły Wydarzenia</h2>
+    <p><strong>Data:</strong> {{ eventDetail.date }}</p>
+  
+    <!-- Szczegóły dla Event -->
     <ng-container *ngIf="isEvent(eventDetail)">
       <p><strong>Zmiana:</strong> {{ eventDetail.shift_name }}</p>
       <p><strong>Start:</strong> {{ eventDetail.start_time }}</p>
       <p><strong>Koniec:</strong> {{ eventDetail.end_time }}</p>
+      <p><strong>Nadgodziny:</strong> {{ eventDetail.overtime || 'Brak' }}</p>
+  
+      <div>
+        <label for="overtime">Dodaj Nadgodziny:</label>
+        <input type="number" [(ngModel)]="overtime" name="overtime" id="overtime" min="0" />
+        <button (click)="onAddOvertime()">Dodaj Nadgodziny</button>
+      </div>
+      <p *ngIf="overtimeMessage">{{ overtimeMessage }}</p>
     </ng-container>
-    
-    <!-- Wyświetlanie szczegółów specyficznych dla FreeDay -->
+  
+    <!-- Szczegóły dla FreeDay -->
     <ng-container *ngIf="isFreeDay(eventDetail)">
       <p><strong>Powód:</strong> {{ eventDetail.reason }}</p>
     </ng-container>
-    
-    <!-- Wyświetlanie szczegółów specyficznych dla Weekend -->
+  
+    <!-- Szczegóły dla Weekend -->
     <ng-container *ngIf="isWeekend(eventDetail)">
       <p><strong>Zmiana:</strong> {{ eventDetail.shift_name }}</p>
     </ng-container>

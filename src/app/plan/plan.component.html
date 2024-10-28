@@ -32,44 +32,59 @@
           <p style="margin: 0;" class="name">{{ user.last_name | truncate:10 }}</p>
         </td>
         <td *ngFor="let day of daysInMonth" class="event-cell">
+          <!-- Dodajemy sprawdzenie dla pustych eventów -->
           <div *ngIf="schedule.get(user.id)?.get(day.format('YYYY-MM-DD')) as events">
-            <div *ngFor="let event of events" 
-            [ngClass]="getEventClass(event.type)" 
-            class="event-content"
-            [ngStyle]="{
-              'background-color': 
-                event.type === 'event' 
-                ? (user.is_central ? shiftColorMap.get('Zmiana centralna') : shiftColorMap.get(primaryShiftMap.get(user.id) || '')) 
-                : 'transparent'
-              }">
-              <span *ngIf="event.type === 'event'" 
-                    class="tooltip" 
-                    [attr.data-title]="user.first_name + '\n' + user.last_name + '\nZmiana: ' + event.details.shift_name + '\nStart: ' + (event.details.start_time | slice:0:5) + '\nKoniec: ' + (event.details.end_time | slice:0:5)">
-                <a [routerLink]="['/details', 'event', event.details.id]">
-                  {{ event.details.start_time | slice:0:5 }} {{ event.details.end_time | slice:0:5 }}
-                </a>
-              </span>
-              <span *ngIf="event.type === 'freeDay'" 
-                    class="tooltip" 
-                    [attr.data-title]="user.first_name + '\n' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nUrlop'">
-                <a [routerLink]="['/details', 'freeDay', event.details.id]">
-                  🌴
-                </a>
-              </span>
-              <span *ngIf="event.type === 'weekend'" 
-                    class="tooltip" 
-                    [attr.data-title]="user.first_name + '\n' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
-                <a [routerLink]="['/details', 'weekend', event.details.id]">
-                  🥂
-                </a>
-              </span>
-              <span *ngIf="event.type === 'holyday'" 
-                    class="tooltip" 
-                    [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nŚwięto'">
-                🙏
-              </span>
-            </div>
+            <ng-container *ngIf="events.length > 0; else emptyCell">
+              <!-- Istniejące wydarzenia -->
+              <div *ngFor="let event of events" 
+                   [ngClass]="getEventClass(event.type)" 
+                   class="event-content"
+                   [ngStyle]="{
+                     'background-color': 
+                       event.type === 'event' 
+                       ? (user.is_central ? shiftColorMap.get('Zmiana centralna') : shiftColorMap.get(primaryShiftMap.get(user.id) || '')) 
+                       : 'transparent'
+                     }">
+                <span *ngIf="event.type === 'event' && event.details.overtime > 0" 
+                      class="overtime-dot"></span>
+
+                <span *ngIf="event.type === 'event'" 
+                      class="tooltip" 
+                      [attr.data-title]="user.first_name + '\n' + user.last_name + '\nZmiana: ' + event.details.shift_name + '\nStart: ' + (event.details.start_time | slice:0:5) + '\nKoniec: ' + (event.details.end_time | slice:0:5) + '\nNadgodziny: ' + event.details.overtime">
+                  <a [routerLink]="['/details', 'event', event.details.id]">
+                    {{ event.details.start_time | slice:0:5 }} {{ event.details.end_time | slice:0:5 }}
+                  </a>
+                </span>
+                <span *ngIf="event.type === 'freeDay'" 
+                      class="tooltip" 
+                      [attr.data-title]="user.first_name + '\n' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nUrlop'">
+                  <a [routerLink]="['/details', 'freeDay', event.details.id]">
+                    🌴
+                  </a>
+                </span>
+                <span *ngIf="event.type === 'weekend'" 
+                      class="tooltip" 
+                      [attr.data-title]="user.first_name + '\n' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nWeekend'">
+                  <a [routerLink]="['/details', 'weekend', event.details.id]">
+                    🥂
+                  </a>
+                </span>
+                <span *ngIf="event.type === 'holyday'" 
+                      class="tooltip" 
+                      [attr.data-title]="user.first_name + '\n ' + user.last_name + '\nData: ' + day.format('YYYY-MM-DD') + '\nŚwięto'">
+                  🙏
+                </span>
+              </div>
+            </ng-container>
           </div>
+
+          <!-- Szablon dla pustych komórek -->
+          <ng-template #emptyCell>
+            <div class="empty-event-cell" (click)="onAddEvent(user, day)">
+              <!-- Wyświetlanie ikony lub tekstu do dodania wydarzenia -->
+              <span class="add-event-icon">+</span>
+            </div>
+          </ng-template>
         </td>
         <td class="total-hours">
           {{ calculateUserTotalHours(user.id) }}

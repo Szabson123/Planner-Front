@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from './users.service';
 
 export interface Event {
+  id: number;
   user: User;
   date: string;
   shift_name: string;
@@ -111,7 +112,7 @@ export class PlanService {
   addShift(shift: Shift): Observable<Shift> {
     return this.http.post<Shift>(`${this.apiUrl}/shifts/`, shift)
   }
-  
+
   // Metody pobierania szczegółów dla poszczególnych typów
   getEventById(id: number): Observable<Event> {
     return this.http.get<Event>(`${this.apiUrl}/events/${id}/`);
@@ -123,5 +124,8 @@ export class PlanService {
 
   getWeekendById(id: number): Observable<Weekend> {
     return this.http.get<Weekend>(`${this.apiUrl}/weekend/${id}/`);
+  }
+  addOvertime(id: number, overtime: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/events/${id}/add_overtime/`, { overtime });
   }
 }
