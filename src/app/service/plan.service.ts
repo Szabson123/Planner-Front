@@ -134,4 +134,8 @@ export class PlanService {
     const payload = { reason };
     return this.http.post(`${this.apiUrl}/events/${id}/change_event_to_freeday/`, payload);
   }
+  changeWeekendToEvent(id: number, start_time: string, end_time: string): Observable<any> {
+    const payload = { start_time, end_time };
+    return this.http.post(`${this.apiUrl}/weekend/${id}/change_weekend_to_event/`, payload);
+}
 }

@@ -83,6 +83,23 @@ export class EventDetailsComponent implements OnInit {
       );
     }
   }
+  onChangeWeekendToEvent(): void {
+    const start_time = prompt('Podaj czas rozpoczęcia:', '08:00');
+    const end_time = prompt('Podaj czas zakończenia:', '16:00');
+    
+    if (start_time && end_time && this.eventDetail) {
+        this.planService.changeWeekendToEvent(this.eventDetail.id, start_time, end_time).subscribe({
+            next: () => {
+                this.router.navigate(['/plan']);
+            },
+            error: (error: HttpErrorResponse) => {
+                this.errorMessage = error.error.error || 'Nie udało się zmienić weekendu na dzień pracujący.';
+            }
+        });
+    } else {
+        this.errorMessage = 'Proszę podać zarówno czas rozpoczęcia, jak i zakończenia.';
+    }
+}
 
   isEvent(detail: Event | FreeDay | Weekend): detail is Event {
     return 'start_time' in detail && 'end_time' in detail;

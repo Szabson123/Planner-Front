@@ -45,10 +45,11 @@
     </ng-container>
   
     <ng-container *ngIf="isWeekend(eventDetail)">
-        <div class="event-info">
-            <span class="label">Typ:</span> Weekend
-        </div>
-    </ng-container>
+      <div class="event-info">
+          <span class="label">Typ:</span> Weekend
+      </div>
+      <button (click)="onChangeWeekendToEvent()" class="change-event-button">Zmień na dzień pracujący</button>
+  </ng-container>
   </div>
   
   <ng-template #errorTemplate>

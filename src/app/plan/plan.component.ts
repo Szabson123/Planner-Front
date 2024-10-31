@@ -473,8 +473,6 @@ export class PlanComponent implements OnInit, OnDestroy {
 
   public onAddEvent(user: User, day: Dayjs): void {
     const date = day.format('YYYY-MM-DD');
-    // Tutaj możesz otworzyć modal lub przejść do strony dodawania wydarzenia
     console.log(`Dodaj nowe wydarzenie dla użytkownika ${user.first_name} na dzień ${date}`);
-    // Możesz również użyć routera do przejścia do strony dodawania wydarzenia.
   }
 }
