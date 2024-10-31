@@ -1,12 +1,19 @@
-<div class="month-navigation">
-  <button (click)="previousMonth()">← Poprzedni miesiąc</button>
-  <span class="current-month">{{ formatCurrentMonth() }}</span>
-  <button (click)="nextMonth()">Następny miesiąc →</button>
+<!-- src/app/your-component/your-component.component.html -->
+<div class="header">
+  <div class="month-navigation">
+    <button (click)="previousMonth()">← Poprzedni miesiąc</button>
+    <span class="current-month">{{ formatCurrentMonth() }}</span>
+    <button (click)="nextMonth()">Następny miesiąc →</button>
+  </div>
+  
+  <div class="planner-buttons" *ngIf="isNextMonth()">
+    <button class="button-18" (click)="generatePlanner()">Generate Planner</button>
+    <button class="button-18-red" (click)="restorePlanner()">Restore Planner</button>
+  </div>
 </div>
 
 <!-- Legenda Kolorów -->
 <div class="shift-legend" *ngIf="shiftColorMap.size > 0">
-  <h3>Legenda Zmian:</h3>
   <ul>
     <li *ngFor="let shift of shiftColorMap | keyvalue">
       <span [ngStyle]="{'background-color': shift.value}" class="legend-color"></span>
@@ -44,7 +51,7 @@
                        event.type === 'event' 
                        ? (user.is_central ? shiftColorMap.get('Zmiana centralna') : shiftColorMap.get(primaryShiftMap.get(user.id) || '')) 
                        : 'transparent'
-                     }">
+                   }">
                 <span *ngIf="event.type === 'event' && event.details.overtime != 0" 
                       class="overtime-dot"></span>
 
@@ -96,12 +103,7 @@
     </tbody>
   </table>
 </div>
-<div *ngIf="isNextMonth()">
-  <button class="button-18" (click)="generatePlanner()">Generate Planner</button>
-  <button class="button-18-red" (click)="restorePlanner()">Restore Planner</button>
-</div>
 
-<!-- Sekcja wyświetlania błędów -->
 <div *ngIf="errorMessage" class="error-message">
   {{ errorMessage }}
 </div>
