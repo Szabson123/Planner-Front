@@ -1,17 +1,19 @@
-<div>
+<div class="event-container">
+    <h1 class="event-title">Dodaj Wolne Dni</h1>
     <form (ngSubmit)="onSubmit(freeDayForm)" #freeDayForm="ngForm">
-        <div>
-            <label for="start_date">Start Date:</label>
-            <input type="date" id="start_date" name="start_date" ngModel required>
-        </div>
-        <div>
-            <label for="end_date">End Date:</label>
-            <input type="date" id="end_date" name="end_date" ngModel required>
-        </div>
-        <div>
-            <label for="reason">Reason:</label>
-            <input type="text" id="reason" name="reason" ngModel required>
-        </div>
-        <button type="submit">Add Free Days</button>
+      <div class="event-info">
+        <label for="start_date" class="label">Data rozpoczęcia:</label>
+        <input type="date" id="start_date" name="start_date" class="overtime-input" ngModel required>
+      </div>
+      <div class="event-info">
+        <label for="end_date" class="label">Data zakończenia:</label>
+        <input type="date" id="end_date" name="end_date" class="overtime-input" ngModel required>
+      </div>
+      <div class="event-info">
+        <label for="reason" class="label">Powód:</label>
+        <input type="text" id="reason" name="reason" class="overtime-input" ngModel required>
+      </div>
+      <button type="submit" class="overtime-button">Dodaj Wolne Dni</button>
     </form>
-</div>
+  </div>
+  

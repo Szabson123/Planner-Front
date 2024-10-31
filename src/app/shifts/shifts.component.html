@@ -1,28 +1,36 @@
-<div>
-    <form (ngSubmit)="onSubmit(shiftForm)" #shiftForm="ngForm">
-      <div>
-        <label for="start_time">Start Time:</label>
-        <input type="time" id="start_time" name="start_time" ngModel required>
-      </div>
-      <div>
-        <label for="end_time">End Time:</label>
-        <input type="time" id="end_time" name="end_time" ngModel required>
-      </div>
-      <div>
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" ngModel required>
-      </div>
-      <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" ngModel required>
-      </div>
-      <div>
-        <label for="users">Users:</label>
-        <div *ngFor="let user of users; let i = index">
-          <input type="checkbox" [value]="user.id" (change)="onCheckboxChange($event, user.id)" name="user{{i}}">{{ user.username }}
+<div class="event-container">
+  <h1 class="event-title">Dodaj Zmianę</h1>
+  <form (ngSubmit)="onSubmit(shiftForm)" #shiftForm="ngForm">
+    <div class="event-info">
+      <label for="start_time" class="label">Czas Rozpoczęcia:</label>
+      <input type="time" id="start_time" name="start_time" class="overtime-input" ngModel required>
+    </div>
+    <div class="event-info">
+      <label for="end_time" class="label">Czas Zakończenia:</label>
+      <input type="time" id="end_time" name="end_time" class="overtime-input" ngModel required>
+    </div>
+    <div class="event-info">
+      <label for="description" class="label">Opis:</label>
+      <input type="text" id="description" name="description" class="overtime-input" ngModel required>
+    </div>
+    <div class="event-info">
+      <label for="name" class="label">Nazwa:</label>
+      <input type="text" id="name" name="name" class="overtime-input" ngModel required>
+    </div>
+    <div class="event-info">
+      <label for="users" class="label">Użytkownicy:</label>
+      <div class="checkbox-group">
+        <div *ngFor="let user of users; let i = index" class="checkbox-item">
+          <input 
+            type="checkbox" 
+            [value]="user.id" 
+            (change)="onCheckboxChange($event, user.id)" 
+            name="user{{i}}" 
+            id="user{{i}}">
+          <label for="user{{i}}">{{ user.username }}</label>
         </div>
       </div>
-      <button type="submit">Add Shift</button>
-    </form>
-  </div>
-  
+    </div>
+    <button type="submit" class="overtime-button">Dodaj Zmianę</button>
+  </form>
+</div>
