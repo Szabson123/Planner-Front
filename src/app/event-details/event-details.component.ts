@@ -1,3 +1,5 @@
+// event-details.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlanService, Event, FreeDay, Weekend } from '../service/plan.service';
@@ -66,6 +68,7 @@ export class EventDetailsComponent implements OnInit {
       }
     });
   }
+
   onChangeEventToFreeDay(): void {
     if (this.eventDetail) {
       const reason = prompt('Podaj powód zmiany na dzień wolny:', 'Brak powodu');
@@ -83,6 +86,7 @@ export class EventDetailsComponent implements OnInit {
       );
     }
   }
+
   onChangeWeekendToEvent(): void {
     const start_time = prompt('Podaj czas rozpoczęcia:', '08:00');
     const end_time = prompt('Podaj czas zakończenia:', '16:00');
@@ -99,7 +103,7 @@ export class EventDetailsComponent implements OnInit {
     } else {
         this.errorMessage = 'Proszę podać zarówno czas rozpoczęcia, jak i zakończenia.';
     }
-}
+  }
 
   isEvent(detail: Event | FreeDay | Weekend): detail is Event {
     return 'start_time' in detail && 'end_time' in detail;
@@ -110,6 +114,6 @@ export class EventDetailsComponent implements OnInit {
   }
   
   isWeekend(detail: Event | FreeDay | Weekend): detail is Weekend {
-    return 'shift_name' in detail && !this.isEvent(detail) && !this.isFreeDay(detail);
+    return !this.isEvent(detail) && !this.isFreeDay(detail);
   }
 }

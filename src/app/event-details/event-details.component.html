@@ -35,7 +35,7 @@
       </div>
       <p *ngIf="overtimeMessage" class="overtime-message">{{ overtimeMessage }}</p>
       
-      <button (click)="onChangeEventToFreeDay()" class="change-freeday-button">Zmień na dzień wolny</button>
+      <button (click)="onChangeEventToFreeDay()" class="change-event-button">Zmień na dzień wolny</button>
     </ng-container>
   
     <ng-container *ngIf="isFreeDay(eventDetail)">

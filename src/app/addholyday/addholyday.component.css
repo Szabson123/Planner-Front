@@ -1,0 +1,23 @@
+.add-holy-day-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+  
+  .alert {
+    text-align: center;
+  }
+  
+  .loading-indicator {
+    text-align: center;
+    font-style: italic;
+  }
+  

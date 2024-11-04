@@ -138,4 +138,8 @@ export class PlanService {
     const payload = { start_time, end_time };
     return this.http.post(`${this.apiUrl}/weekend/${id}/change_weekend_to_event/`, payload);
 }
+  addHolyDay(name: string, date: string): Observable<any> {
+    const payload = { name, date };
+    return this.http.post<any>(`${this.apiUrl}/holyday/`, payload);
+}
 }

@@ -7,6 +7,7 @@ import { ShiftsComponent } from './shifts/shifts.component';
 import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { AddHolyDayComponent } from './addholyday/addholyday.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,8 @@ export const routes: Routes = [
     path: 'shifts', 
     component: ShiftsComponent
   },
+  { path: 'add-holyday',
+   component: AddHolyDayComponent },
   
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

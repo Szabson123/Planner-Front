@@ -5,9 +5,10 @@
   <ul class="navbar">
     <li><a routerLink="/plan">Planner</a></li>
     <li><a routerLink="/free_days">Dodaj Urlop</a></li>
-    <li><a routerLink="/avaibility">Dodaj Dostępność</a></li>
-    <li><a routerLink="/shifts">Stwórz nową zmianę</a></li>
+    <!-- <li><a routerLink="/avaibility">Dodaj Dostępność</a></li>
+    <li><a routerLink="/shifts">Stwórz nową zmianę</a></li> -->
     <li><a routerLink="/faq">Maszyny</a></li>
+    <li><a routerLink="/add-holyday" class="btn btn-success mt-3">Dodaj Święto</a></li>
 
     <!-- Warunkowe wyświetlanie linków -->
     <ng-container *ngIf="isLoggedIn$ | async; else loggedOut">

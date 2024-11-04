@@ -112,3 +112,13 @@
       width: 100%;
     }
   }
+  .change-event-button{
+    padding: 8px 16px;
+    background-color: green;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: var(--font-primary);
+  }

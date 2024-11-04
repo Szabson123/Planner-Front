@@ -6,7 +6,7 @@ import { PlanService, Event, FreeDay, Weekend, HolyDay } from '../service/plan.s
 import { UsersService, User } from '../service/users.service';
 import { RouterModule } from '@angular/router';
 import dayjs, { Dayjs } from 'dayjs';
-import 'dayjs/locale/pl';
+import 'dayjs/locale/pl'; // Import polskiego locale (usunąć duplikat)
 import { BehaviorSubject, Subscription, EMPTY, Observable, of, forkJoin } from 'rxjs';
 import { switchMap, distinctUntilChanged, catchError, tap, debounceTime, finalize, shareReplay, retry, map } from 'rxjs/operators';
 import { TruncatePipe } from '../truncate.pipe';
@@ -67,7 +67,7 @@ export class PlanComponent implements OnInit, OnDestroy {
 
   private inProgressRequests: Map<string, Observable<void>> = new Map();
 
-  private navigationSubject = new BehaviorSubject<Dayjs>(dayjs().startOf('month'));
+  private navigationSubject!: BehaviorSubject<Dayjs>;
   
   private navigationSubscription!: Subscription;
   private dataFetchSubscription!: Subscription;
@@ -75,7 +75,14 @@ export class PlanComponent implements OnInit, OnDestroy {
   private isInitialLoad = true;
 
   constructor(private planService: PlanService, private usersService: UsersService) {
-    this.currentMonth = this.navigationSubject.value;
+    // Ustawienie polskiego locale
+    dayjs.locale('pl'); 
+
+    // Inicjalizacja currentMonth po ustawieniu locale
+    this.currentMonth = dayjs().startOf('month');
+
+    // Inicjalizacja navigationSubject po ustawieniu locale
+    this.navigationSubject = new BehaviorSubject<Dayjs>(this.currentMonth);
   }
 
   ngOnInit(): void {
@@ -99,6 +106,7 @@ export class PlanComponent implements OnInit, OnDestroy {
         }
       } else {
         this.isLoading = true;
+        this.loadDataForMonthObservable(monthStr, true).subscribe();
       }
     });
 
@@ -270,7 +278,8 @@ export class PlanComponent implements OnInit, OnDestroy {
   }
 
   public formatCurrentMonth(): string {
-    return this.currentMonth.format('MMMM YYYY');
+    const formatted = this.currentMonth.format('MMMM YYYY');
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
   }
 
   private loadFromCache(month: string): void {
@@ -399,7 +408,7 @@ export class PlanComponent implements OnInit, OnDestroy {
       }
     }
     // Przypisanie koloru do centralnych użytkowników, jeśli jeszcze go nie ma
-    if (!this.shiftColorMap.has("Central User")) {
+    if (!this.shiftColorMap.has("Zmiana centralna")) {
       this.shiftColorMap.set("Zmiana centralna", "#FFD700"); 
     }
   }
@@ -467,6 +476,7 @@ export class PlanComponent implements OnInit, OnDestroy {
       }
     });
   }
+  
   public isNextMonth(): boolean {
     return this.currentMonth.isSame(dayjs().add(1, 'month').startOf('month'), 'month');
   }
