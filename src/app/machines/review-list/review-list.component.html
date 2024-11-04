@@ -1,0 +1,11 @@
+<ul>
+    <li *ngFor="let review of reviews">
+      <p>
+        {{ review.date }}: {{ review.description }} - 
+        <strong>{{ review.done ? 'Wykonane' : 'Nie wykonane' }}</strong>
+        <button (click)="toggleDone(review)">Zmień Status</button>
+        <button (click)="deleteReview(review.id)">Usuń</button>
+      </p>
+    </li>
+  </ul>
+  

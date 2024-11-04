@@ -1,0 +1,20 @@
+<h2>Szczegóły Maszyny</h2>
+<div *ngIf="machine">
+  <h3>{{ machine.name }}</h3>
+  <p>Lokalizacja: {{ machine.location }}</p>
+  <p>{{ machine.description }}</p>
+
+  <h4>Recenzje</h4>
+  <app-review-list [machineId]="machineId"></app-review-list>
+
+  <h5>Dodaj Recenzję</h5>
+  <form (ngSubmit)="addReview()">
+    <label for="date">Data:</label>
+    <input id="date" [(ngModel)]="newReview.date" name="date" type="date" required />
+
+    <label for="description">Opis:</label>
+    <textarea id="description" [(ngModel)]="newReview.description" name="description" required></textarea>
+
+    <button type="submit">Dodaj Recenzję</button>
+  </form>
+</div>

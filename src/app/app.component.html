@@ -1,25 +1,37 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-<nav>
-  <ul class="navbar">
-    <li><a routerLink="/plan">Planner</a></li>
-    <li><a routerLink="/free_days">Dodaj Urlop</a></li>
-    <!-- <li><a routerLink="/avaibility">Dodaj Dostępność</a></li>
-    <li><a routerLink="/shifts">Stwórz nową zmianę</a></li> -->
-    <li><a routerLink="/faq">Maszyny</a></li>
-    <li><a routerLink="/add-holyday" class="btn btn-success mt-3">Dodaj Święto</a></li>
+<head>
+  <meta charset="UTF-8">
+  <title>Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-dI5uq0NtOM8XakD9P4kS3QObYKKyQrQQG3SQuJqd1c6ICG6LpeWn6wGhMcMshVp7j0KcgCr0eyr1vHsv4aV0wA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <nav>
+    <ul class="navbar">
+      <li class="logo">
+        <a routerLink="/plan">
+          <i class="fas fa-calendar-alt"></i> Planner
+        </a>
+      </li>
+      <li><a routerLink="/plan">Home</a></li>
+      <li><a routerLink="/free_days"> Dodaj Urlop</a></li>
+      <!-- <li><a routerLink="/availability"><i class="fas fa-check-circle"></i> Dodaj Dostępność</a></li>
+      <li><a routerLink="/shifts"><i class="fas fa-tasks"></i> Stwórz nową zmianę</a></li> -->
+      <li><a routerLink="/machines"> Maszyny</a></li>
+      <li><a routerLink="/add-holyday"> Dodaj Święto</a></li>
 
-    <!-- Warunkowe wyświetlanie linków -->
-    <ng-container *ngIf="isLoggedIn$ | async; else loggedOut">
-      <li class="welcome"><a href="#">Witaj, {{ userName$ | async }}</a></li>
-      <li><a routerLink="/logout">Wyloguj się</a></li>
-    </ng-container>
+      <!-- Warunkowe wyświetlanie linków -->
+      <ng-container *ngIf="isLoggedIn$ | async; else loggedOut">
+        <li class="welcome"><a href="#"><i class="fas fa-user"></i> Witaj, {{ userName$ | async }}</a></li>
+        <li><a routerLink="/logout"><i class="fas fa-sign-out-alt"></i> Wyloguj się</a></li>
+      </ng-container>
 
-    <ng-template #loggedOut>
-      <li><a routerLink="/login">Zaloguj się</a></li>
-      <li><a routerLink="/register">Zarejestruj się</a></li>
-    </ng-template>
-  </ul>
-</nav>
-<router-outlet></router-outlet>
+      <ng-template #loggedOut>
+        <li><a routerLink="/login"><i class="fas fa-sign-in-alt"></i> Zaloguj się</a></li>
+        <li><a routerLink="/register"><i class="fas fa-user-plus"></i> Zarejestruj się</a></li>
+      </ng-template>
+    </ul>
+  </nav>
+  <router-outlet></router-outlet>
+</body>

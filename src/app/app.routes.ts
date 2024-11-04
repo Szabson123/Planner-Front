@@ -8,6 +8,9 @@ import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AddHolyDayComponent } from './addholyday/addholyday.component';
+import { MachineAddComponent } from './machines/machine-add/machine-add.component';
+import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
+import { MachineListComponent } from './machines/machine-list/machine-list.component';
 
 export const routes: Routes = [
   {
@@ -17,7 +20,9 @@ export const routes: Routes = [
       planData: planResolver
     }
   },
-
+  { path: 'machines', component: MachineListComponent },
+  { path: 'machines/add', component: MachineAddComponent },
+  { path: 'machines/:id', component: MachineDetailComponent },
   {
     path: 'availability',
     component: AvailabilityComponent

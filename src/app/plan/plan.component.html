@@ -34,8 +34,8 @@
     <tbody>
       <tr *ngFor="let user of users">
         <td class="user-name">
-          <p style="margin: 0;" class="name">{{ user.first_name | truncate:10 }}</p> 
-          <p style="margin: 0;" class="name">{{ user.last_name | truncate:10 }}</p>
+          <p style="margin: 0;" class="name">{{ user.first_name | truncate:9 }}</p> 
+          <p style="margin: 0;" class="name">{{ user.last_name | truncate:9 }}</p>
         </td>
         <td *ngFor="let day of daysInMonth" class="event-cell">
           <!-- Dodajemy sprawdzenie dla pustych eventów -->

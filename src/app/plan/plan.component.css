@@ -151,7 +151,7 @@ h3 {
 .calendar-grid th,
 .calendar-grid td {
   border: 1px solid #ddd;
-  padding: 6px;
+  padding: 5.5px;
   position: relative;
   vertical-align: middle;
 }
@@ -186,7 +186,7 @@ h3 {
   margin-bottom: 4px;
   padding: 5px;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
   display: inline-block; 
 }

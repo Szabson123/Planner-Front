@@ -1,0 +1,13 @@
+<h2>Dodaj Nową Maszynę</h2>
+<form (ngSubmit)="addMachine()">
+  <label for="name">Nazwa:</label>
+  <input id="name" [(ngModel)]="machine.name" name="name" required />
+
+  <label for="location">Lokalizacja:</label>
+  <input id="location" [(ngModel)]="machine.location" name="location" required />
+
+  <label for="description">Opis:</label>
+  <textarea id="description" [(ngModel)]="machine.description" name="description" required></textarea>
+
+  <button type="submit">Dodaj Maszynę</button>
+</form>

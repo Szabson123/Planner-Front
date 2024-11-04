@@ -1,0 +1,10 @@
+<h2>Lista Maszyn</h2>
+<button (click)="addMachine()">Dodaj Nową Maszynę</button>
+<ul>
+  <li *ngFor="let machine of machines">
+    <h3>{{ machine.name }}</h3>
+    <p>Lokalizacja: {{ machine.location }}</p>
+    <p>{{ machine.description }}</p>
+    <button (click)="viewMachine(machine.id)">Szczegóły</button>
+  </li>
+</ul>
