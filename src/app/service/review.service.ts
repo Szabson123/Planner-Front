@@ -14,7 +14,7 @@ export interface Review {
   providedIn: 'root'
 })
 export class ReviewService {
-  private apiUrl = 'http://127.0.0.1:8000/machines/'; // Dostosuj URL do swojego API
+  private apiUrl = 'http://127.0.0.1:8000/machines/';
 
   constructor(private http: HttpClient) { }
 
@@ -37,7 +37,7 @@ export class ReviewService {
   deleteReview(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}${id}/`);
   }
-  getallReviews(machineId: number): Observable<Review[]> {
+  getallReviews(): Observable<Review[]> {
     return this.http.get<Review[]>(`http://127.0.0.1:8000/machines/reviews/all/`);
   }
 }

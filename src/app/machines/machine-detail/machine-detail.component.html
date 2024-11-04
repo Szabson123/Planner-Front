@@ -8,7 +8,7 @@
       </div>
   
       <div class="reviews-section">
-        <h4 class="section-title">Przegląd</h4>
+        <h4 class="section-title">Przeglądy</h4>
         <app-review-list [machineId]="machineId"></app-review-list>
       </div>
   
@@ -24,7 +24,11 @@
               type="date"
               required
               class="form-input"
+              placeholder="Wprowadź datę"
             />
+            <div *ngIf="!newReview.date && submitted" class="error-message">
+              Data jest wymagana.
+            </div>
           </div>
   
           <div class="form-group">
@@ -35,11 +39,18 @@
               name="description"
               required
               class="form-textarea"
+              placeholder="Wprowadź opis recenzji"
             ></textarea>
+            <div *ngIf="!newReview.description && submitted" class="error-message">
+              Opis jest wymagany.
+            </div>
           </div>
   
-          <button type="submit" class="submit-button">Dodaj Recenzję</button>
+          <button type="submit" class="submit-button">Dodaj Przegląd</button>
         </form>
+        <div *ngIf="errorMessage" class="error-notification">
+          {{ errorMessage }}
+        </div>
       </div>
     </div>
   </div>

@@ -20,7 +20,7 @@ export class ReviewListComponent implements OnInit {
   }
 
   loadReviews(): void {
-    this.reviewService.getallReviews(this.machineId).subscribe(data => {
+    this.reviewService.getallReviews().subscribe(data => {
       this.reviews = data;
     });
   }
