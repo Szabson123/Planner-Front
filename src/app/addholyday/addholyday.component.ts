@@ -37,8 +37,7 @@ export class AddHolyDayComponent {
         this.successMessage = 'Święto zostało dodane pomyślnie.';
         this.errorMessage = null;
         this.isLoading = false;
-        // Opcjonalnie, przekierowanie do innej strony
-        // this.router.navigate(['/plan']);
+        this.router.navigate(['/plan']);
       },
       error: (error) => {
         console.error('Błąd podczas dodawania święta:', error);

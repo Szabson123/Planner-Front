@@ -1,47 +1,48 @@
-<div class="add-holy-day-container">
-    <h2>Dodaj Nowe Święto</h2>
-  
+<!-- add-holy-day.component.html -->
+
+<div class="event-container">
+    <h2 class="event-title">Dodaj Nowe Święto</h2>
+
     <form (ngSubmit)="onSubmit()" #holyDayForm="ngForm">
-      <div class="form-group">
-        <label for="name">Nazwa Święta:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          [(ngModel)]="name"
-          required
-          class="form-control"
-          placeholder="Wprowadź nazwę święta"
-        />
-      </div>
-  
-      <div class="form-group">
-        <label for="date">Data Święta:</label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          [(ngModel)]="date"
-          required
-          class="form-control"
-        />
-      </div>
-  
-      <button type="submit" class="btn btn-primary" [disabled]="!holyDayForm.form.valid || isLoading">
-        {{ isLoading ? 'Dodawanie...' : 'Dodaj Święto' }}
-      </button>
+        <div class="event-info form-group">
+            <label for="name" class="label">Nazwa Święta:</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                [(ngModel)]="name"
+                required
+                class="overtime-input"
+                placeholder="Wprowadź nazwę święta"
+            />
+        </div>
+
+        <div class="event-info form-group">
+            <label for="date" class="label">Data Święta:</label>
+            <input
+                type="date"
+                id="date"
+                name="date"
+                [(ngModel)]="date"
+                required
+                class="overtime-input"
+            />
+        </div>
+
+        <button type="submit" class="overtime-button" [disabled]="!holyDayForm.form.valid || isLoading">
+            {{ isLoading ? 'Dodawanie...' : 'Dodaj Święto' }}
+        </button>
     </form>
-  
-    <div *ngIf="successMessage" class="alert alert-success mt-3">
-      {{ successMessage }}
+
+    <div *ngIf="successMessage" class="overtime-message">
+        {{ successMessage }}
     </div>
-  
-    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-      {{ errorMessage }}
+
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
     </div>
-  
-    <div *ngIf="isLoading" class="loading-indicator mt-3">
-      <p>Dodawanie święta...</p>
+
+    <div *ngIf="isLoading" class="loading-indicator">
+        <p>Dodawanie święta...</p>
     </div>
-  </div>
-  
+</div>

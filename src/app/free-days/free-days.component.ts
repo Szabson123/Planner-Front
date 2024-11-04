@@ -4,6 +4,7 @@ import { PlanService } from '../service/plan.service';
 import { NgForm, FormsModule } from '@angular/forms';
 import { start } from 'repl';
 import { error } from 'console';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { error } from 'console';
   styleUrl: './free-days.component.css',
 })
 export class FreeDaysComponent {
-  constructor(private planService: PlanService) {}
+  constructor(private planService: PlanService, private router: Router) {}
 
   onSubmit(form: NgForm) {
     if (form.valid){
@@ -26,6 +27,7 @@ export class FreeDaysComponent {
     this.planService.addFreeDays(startDate, endDate, reason).subscribe(response => {
       console.log('Free days added:', response);
       form.reset();
+      this.router.navigate(['/plan']);
     }, error => {
       console.error('Error adding free days:', error)
     })
