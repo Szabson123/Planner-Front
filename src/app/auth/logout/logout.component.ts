@@ -10,11 +10,5 @@ import { Router } from '@angular/router';
 export class LogoutComponent {
   constructor(private authService: AuthService, private router: Router) {
     this.authService.logout();
-    setTimeout(() => {
-      this.router.navigate(['/']);
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
-    }, 100);
   }
 }

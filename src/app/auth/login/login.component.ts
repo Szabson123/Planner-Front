@@ -11,7 +11,6 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./login.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
-  providers: [AuthService]
 })
 export class LoginComponent {
   username: string = '';
@@ -20,16 +19,15 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  login() {
+  login(): void {
     this.authService.login(this.username, this.password).subscribe(
       () => {
-        this.router.navigate(['/']);
-        setTimeout(() => {
-          window.location.reload(); 
-        }, 100);
+        console.log('Logowanie zakończone sukcesem, nawigacja do strony głównej...');
+        this.router.navigate(['/']); // Nawiguj po zalogowaniu
+        // Nie odświeżamy strony
       },
       (error) => {
-        this.errorMessage = 'Invalid username or password';
+        this.errorMessage = 'Nieprawidłowa nazwa użytkownika lub hasło';
       }
     );
   }

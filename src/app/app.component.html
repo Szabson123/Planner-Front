@@ -8,9 +8,17 @@
     <li><a routerLink="/avaibility">Dodaj Dostępność</a></li>
     <li><a routerLink="/shifts">Stwórz nową zmianę</a></li>
     <li><a routerLink="/faq">Maszyny</a></li>
-    <li><a routerLink="/login">Zaloguj się</a></li>
-    <li><a routerLink="/register">Zarejestuj się</a></li>
-    <li><a routerLink="/logout">Wyloguj się</a></li>
+
+    <!-- Warunkowe wyświetlanie linków -->
+    <ng-container *ngIf="isLoggedIn$ | async; else loggedOut">
+      <li class="welcome"><a href="#">Witaj, {{ userName$ | async }}</a></li>
+      <li><a routerLink="/logout">Wyloguj się</a></li>
+    </ng-container>
+
+    <ng-template #loggedOut>
+      <li><a routerLink="/login">Zaloguj się</a></li>
+      <li><a routerLink="/register">Zarejestruj się</a></li>
+    </ng-template>
   </ul>
 </nav>
 <router-outlet></router-outlet>

@@ -14,12 +14,16 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const currentUser = this.authService.currentUserValue;
     if (currentUser) {
+      console.log('Dodawanie nagłówka Authorization:', currentUser);
       request = this.addToken(request, currentUser);
+    } else {
+      console.log('Brak tokenu, wysyłanie żądania bez Authorization');
     }
-
+  
     return next.handle(request).pipe(
       catchError(error => {
         if (error instanceof HttpErrorResponse && error.status === 401 && error.error.code === 'token_not_valid') {
+          console.log('Wykryto 401, próbuję odświeżyć token');
           return this.handle401Error(request, next);
         } else {
           return throwError(error);
@@ -45,10 +49,12 @@ export class AuthInterceptor implements HttpInterceptor {
         switchMap((token: any) => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.access);
+          console.log('Token odświeżony, ponawiam żądanie');
           return next.handle(this.addToken(request, token.access));
         }),
         catchError((err) => {
           this.isRefreshing = false;
+          console.error('Nie udało się odświeżyć tokenu, wylogowanie');
           this.authService.logout();
           return throwError(err);
         })
@@ -58,6 +64,7 @@ export class AuthInterceptor implements HttpInterceptor {
         filter(token => token != null),
         take(1),
         switchMap(jwt => {
+          console.log('Token odświeżony, ponawiam żądanie z nowym tokenem');
           return next.handle(this.addToken(request, jwt));
         })
       );
