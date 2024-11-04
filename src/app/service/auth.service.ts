@@ -1,4 +1,3 @@
-// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -9,7 +8,7 @@ import { tap, catchError, switchMap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://127.0.0.1:8000/auth'; // Upewnij się, że baseUrl wskazuje na /auth/
+  private baseUrl = 'http://127.0.0.1:8000/auth';
   
   private currentUserSubject: BehaviorSubject<string | null>;
   public currentUser: Observable<string | null>;
@@ -27,16 +26,19 @@ export class AuthService {
 
     this.userProfileSubject = new BehaviorSubject<any | null>(null);
     this.userProfile = this.userProfileSubject.asObservable();
+  }
 
+  initialize(): void {
+    const token = this.currentUserSubject.value;
     if (token) {
       console.log('Token znaleziony w localStorage, ładowanie profilu...');
       this.loadProfile().subscribe(
         profile => {
-          console.log('Profil załadowany w konstruktorze:', profile);
+          console.log('Profil załadowany w initialize:', profile);
           this.userProfileSubject.next(profile);
         },
         error => {
-          console.error('Nie udało się załadować profilu w konstruktorze', error);
+          console.error('Nie udało się załadować profilu w initialize', error);
           this.logout();
         }
       );
@@ -61,7 +63,7 @@ export class AuthService {
         this.currentUserSubject.next(response.access);
         console.log('Token ustawiony w currentUserSubject:', this.currentUserSubject.value);
       }),
-      switchMap(() => this.loadProfile()), // Czeka na załadowanie profilu
+      switchMap(() => this.loadProfile()),
       tap(profile => {
         console.log('Profil załadowany po logowaniu:', profile);
         this.userProfileSubject.next(profile);
@@ -96,7 +98,6 @@ export class AuthService {
       },
       error => {
         console.error('Błąd wylogowania:', error);
-        // Nawet jeśli wylogowanie z serwera się nie powiedzie, wyczyść dane lokalne
         this.clearAuthData();
         this.router.navigate(['/login']);
       }
@@ -131,7 +132,7 @@ export class AuthService {
 
   getProfile(): Observable<any> {
     console.log('Pobieranie profilu użytkownika...');
-    return this.http.get<any>(`${this.baseUrl}/profile/`).pipe( // Używa poprawnego endpointu /auth/profile/
+    return this.http.get<any>(`${this.baseUrl}/profile/`).pipe( 
       tap(profile => {
         console.log('Pobrano profil:', profile);
       }),
@@ -145,7 +146,6 @@ export class AuthService {
   loadProfile(): Observable<any> {
     return this.getProfile().pipe(
       tap(profile => {
-        // Możesz dodatkowo przetwarzać dane profilu tutaj, jeśli to konieczne
       })
     );
   }

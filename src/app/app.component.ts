@@ -1,4 +1,3 @@
-// app.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './service/auth.service';
@@ -23,6 +22,8 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.authService.initialize();
+
     this.isLoggedIn$ = this.authService.currentUser.pipe(
       map(token => token !== null)
     );

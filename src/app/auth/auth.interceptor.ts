@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { AuthService } from '../service/auth.service';
@@ -9,10 +9,12 @@ export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private authService: AuthService) {}
+  constructor(private injector: Injector) {} 
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const currentUser = this.authService.currentUserValue;
+    const authService = this.injector.get(AuthService); 
+    const currentUser = authService.currentUserValue;
+    
     if (currentUser) {
       console.log('Dodawanie nagłówka Authorization:', currentUser);
       request = this.addToken(request, currentUser);
@@ -24,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError(error => {
         if (error instanceof HttpErrorResponse && error.status === 401 && error.error.code === 'token_not_valid') {
           console.log('Wykryto 401, próbuję odświeżyć token');
-          return this.handle401Error(request, next);
+          return this.handle401Error(request, next, authService);
         } else {
           return throwError(error);
         }
@@ -40,12 +42,12 @@ export class AuthInterceptor implements HttpInterceptor {
     });
   }
 
-  private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler, authService: AuthService) {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
-      return this.authService.refreshToken().pipe(
+      return authService.refreshToken().pipe(
         switchMap((token: any) => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.access);
@@ -55,7 +57,7 @@ export class AuthInterceptor implements HttpInterceptor {
         catchError((err) => {
           this.isRefreshing = false;
           console.error('Nie udało się odświeżyć tokenu, wylogowanie');
-          this.authService.logout();
+          authService.logout();
           return throwError(err);
         })
       );
