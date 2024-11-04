@@ -14,16 +14,16 @@ export interface Review {
   providedIn: 'root'
 })
 export class ReviewService {
-  private apiUrl = 'http://localhost:8000/api/reviews/'; // Dostosuj URL do swojego API
+  private apiUrl = 'http://127.0.0.1:8000/machines/'; // Dostosuj URL do swojego API
 
   constructor(private http: HttpClient) { }
 
   getReviews(machineId: number): Observable<Review[]> {
-    return this.http.get<Review[]>(`http://localhost:8000/api/machines/${machineId}/reviews/`);
+    return this.http.get<Review[]>(`http://127.0.0.1:8000/machines/${machineId}/reviews/`);
   }
 
   addReview(machineId: number, review: Partial<Review>): Observable<Review> {
-    return this.http.post<Review>(`http://localhost:8000/api/machines/${machineId}/reviews/`, review);
+    return this.http.post<Review>(`http://127.0.0.1:8000/machines/${machineId}/reviews/`, review);
   }
 
   updateReview(id: number, review: Partial<Review>): Observable<Review> {
@@ -36,5 +36,8 @@ export class ReviewService {
 
   deleteReview(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}${id}/`);
+  }
+  getallReviews(machineId: number): Observable<Review[]> {
+    return this.http.get<Review[]>(`http://127.0.0.1:8000/machines/reviews/all/`);
   }
 }

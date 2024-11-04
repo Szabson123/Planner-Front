@@ -1,20 +1,46 @@
-<h2>Szczegóły Maszyny</h2>
-<div *ngIf="machine">
-  <h3>{{ machine.name }}</h3>
-  <p>Lokalizacja: {{ machine.location }}</p>
-  <p>{{ machine.description }}</p>
-
-  <h4>Recenzje</h4>
-  <app-review-list [machineId]="machineId"></app-review-list>
-
-  <h5>Dodaj Recenzję</h5>
-  <form (ngSubmit)="addReview()">
-    <label for="date">Data:</label>
-    <input id="date" [(ngModel)]="newReview.date" name="date" type="date" required />
-
-    <label for="description">Opis:</label>
-    <textarea id="description" [(ngModel)]="newReview.description" name="description" required></textarea>
-
-    <button type="submit">Dodaj Recenzję</button>
-  </form>
-</div>
+<div class="detail-container">
+    <h2 class="detail-title">Szczegóły Maszyny</h2>
+    <div class="machine-detail-card" *ngIf="machine">
+      <div class="machine-info">
+        <h3 class="machine-name">{{ machine.name }}</h3>
+        <p class="machine-location"><strong>Lokalizacja:</strong> {{ machine.location }}</p>
+        <p class="machine-description">{{ machine.description }}</p>
+      </div>
+  
+      <div class="reviews-section">
+        <h4 class="section-title">Przegląd</h4>
+        <app-review-list [machineId]="machineId"></app-review-list>
+      </div>
+  
+      <div class="add-review-section">
+        <h5 class="section-subtitle">Dodaj Przegląd</h5>
+        <form (ngSubmit)="addReview()" class="review-form">
+          <div class="form-group">
+            <label for="date">Data:</label>
+            <input
+              id="date"
+              [(ngModel)]="newReview.date"
+              name="date"
+              type="date"
+              required
+              class="form-input"
+            />
+          </div>
+  
+          <div class="form-group">
+            <label for="description">Opis:</label>
+            <textarea
+              id="description"
+              [(ngModel)]="newReview.description"
+              name="description"
+              required
+              class="form-textarea"
+            ></textarea>
+          </div>
+  
+          <button type="submit" class="submit-button">Dodaj Recenzję</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,90 @@
+/* Stylizacja kontenera */
+.container {
+    max-width: 1200px; /* Maksymalna szerokość kontenera */
+    margin: 0 auto; /* Wyśrodkowanie kontenera */
+    padding: 20px;
+  }
+  
+  /* Wyśrodkowanie tytułu */
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #333;
+  }
+  
+  /* Stylizacja przycisku dodawania maszyny */
+  .add-button {
+    display: block;
+    background-color: #4CAF50; /* Zielony kolor */
+    color: white;
+    padding: 10px 20px;
+    margin: 0 auto 20px auto; /* Wyśrodkowanie przycisku */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Stylizacja listy maszyn */
+  .machine-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Wyśrodkowanie kart */
+    gap: 20px; /* Odstęp między kartami */
+  }
+  
+  /* Stylizacja pojedynczej karty maszyny */
+  .machine-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: calc(25% - 20px); /* Cztery karty w rzędzie z uwzględnieniem odstępów */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .machine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  
+  /* Stylizacja przycisku szczegółów */
+  .details-button {
+    background-color: #008CBA; /* Niebieski kolor */
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .details-button:hover {
+    background-color: #007bb5;
+  }
+  
+  /* Responsywność: zmniejszenie liczby kart na mniejszych ekranach */
+  @media (max-width: 1200px) {
+    .machine-card {
+      width: calc(33.333% - 20px); /* Trzy karty w rzędzie */
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .machine-card {
+      width: calc(50% - 20px); /* Dwie karty w rzędzie */
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .machine-card {
+      width: 100%; /* Jedna karta w rzędzie */
+    }
+  }
+  

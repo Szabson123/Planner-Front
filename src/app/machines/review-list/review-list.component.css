@@ -1,0 +1,132 @@
+/* Stylizacja kontenera recenzji */
+.review-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Stylizacja listy recenzji */
+  .reviews-list {
+    list-style-type: none; /* Usuń domyślne punkty listy */
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Stylizacja pojedynczego elementu listy */
+  .review-item {
+    background-color: #f9f9f9; /* Jasne tło */
+    border: 1px solid #ddd; /* Delikatne obramowanie */
+    border-radius: 8px; /* Zaokrąglone rogi */
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lekki cień */
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  /* Efekt hover na elemencie listy */
+  .review-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Kontener treści recenzji */
+  .review-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  /* Stylizacja tekstu recenzji */
+  .review-text {
+    flex: 1;
+    min-width: 200px;
+    margin-right: 10px;
+    color: #333;
+    font-size: 1em;
+  }
+  
+  /* Stylizacja nazwy maszyny */
+  .machine-name {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #4CAF50; /* Zielony kolor dla nazwy maszyny */
+  }
+  
+  /* Stylizacja daty recenzji */
+  .review-date {
+    color: #777;
+    margin-right: 10px;
+  }
+  
+  /* Stylizacja statusu recenzji */
+  .review-status {
+    color: #ff9800; /* Pomarańczowy kolor dla statusu */
+  }
+  
+  /* Stylizacja przycisków akcji */
+  .review-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .toggle-button,
+  .delete-button {
+    display: flex;
+    align-items: center;
+    background-color: #008CBA; /* Niebieski kolor */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-size: 0.9em;
+  }
+  
+  .delete-button {
+    background-color: #f44336; /* Czerwony kolor */
+  }
+  
+  .toggle-button:hover {
+    background-color: #005f6a;
+    transform: scale(1.05);
+  }
+  
+  .delete-button:hover {
+    background-color: #d32f2f;
+    transform: scale(1.05);
+  }
+  
+  /* Stylizacja ikon w przyciskach */
+  .toggle-button i,
+  .delete-button i {
+    margin-right: 5px;
+  }
+  
+  /* Stylizacja komunikatu o braku recenzji */
+  .no-reviews p {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+  }
+  
+  /* Responsywność: na małych ekranach układ w kolumnie */
+  @media (max-width: 600px) {
+    .review-content {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .review-text {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  
+    .review-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+  

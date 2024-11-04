@@ -1,11 +1,26 @@
-<ul>
-    <li *ngFor="let review of reviews">
-      <p>
-        {{ review.date }}: {{ review.description }} - 
-        <strong>{{ review.done ? 'Wykonane' : 'Nie wykonane' }}</strong>
-        <button (click)="toggleDone(review)">Zmień Status</button>
-        <button (click)="deleteReview(review.id)">Usuń</button>
-      </p>
-    </li>
-  </ul>
+<div class="review-container">
+    <ul class="reviews-list">
+      <li *ngFor="let review of reviews" class="review-item">
+        <div class="review-content">
+          <div class="review-text">
+            <span class="machine-name">{{ review.machine_name }}</span>
+            <span class="review-date">{{ review.date }}</span>
+            : {{ review.description }} - 
+            <strong class="review-status">{{ review.done ? 'Wykonane' : 'Nie wykonane' }}</strong>
+          </div>
+          <div class="review-actions">
+            <button (click)="toggleDone(review)" class="toggle-button">
+              <i class="fas fa-sync-alt"></i> Zmień Status
+            </button>
+            <button class="delete-button">
+              <i class="fas fa-trash-alt"></i> Usuń
+            </button>
+          </div>
+        </div>
+      </li>
+      <li *ngIf="reviews.length === 0" class="no-reviews">
+        <p>Brak recenzji do wyświetlenia.</p>
+      </li>
+    </ul>
+  </div>
   

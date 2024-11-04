@@ -11,6 +11,7 @@ import { AddHolyDayComponent } from './addholyday/addholyday.component';
 import { MachineAddComponent } from './machines/machine-add/machine-add.component';
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 import { MachineListComponent } from './machines/machine-list/machine-list.component';
+import { ReviewListComponent } from './machines/review-list/review-list.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,9 @@ export const routes: Routes = [
   { path: 'machines', component: MachineListComponent },
   { path: 'machines/add', component: MachineAddComponent },
   { path: 'machines/:id', component: MachineDetailComponent },
+
+  { path: 'review', component: ReviewListComponent },
+
   {
     path: 'availability',
     component: AvailabilityComponent

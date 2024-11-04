@@ -1,13 +1,48 @@
-<h2>Dodaj Nową Maszynę</h2>
-<form (ngSubmit)="addMachine()">
-  <label for="name">Nazwa:</label>
-  <input id="name" [(ngModel)]="machine.name" name="name" required />
-
-  <label for="location">Lokalizacja:</label>
-  <input id="location" [(ngModel)]="machine.location" name="location" required />
-
-  <label for="description">Opis:</label>
-  <textarea id="description" [(ngModel)]="machine.description" name="description" required></textarea>
-
-  <button type="submit">Dodaj Maszynę</button>
-</form>
+<br>
+<br>
+<div class="add-container">
+    <h2 class="add-title">Dodaj Nową Maszynę</h2>
+    <div class="form-card">
+      <form (ngSubmit)="addMachine()" class="add-form">
+        <div class="form-group">
+          <label for="name">Nazwa:</label>
+          <input
+            id="name"
+            [(ngModel)]="machine.name"
+            name="name"
+            type="text"
+            required
+            class="form-input"
+            placeholder="Wprowadź nazwę maszyny"
+          />
+        </div>
+  
+        <div class="form-group">
+          <label for="location">Lokalizacja:</label>
+          <input
+            id="location"
+            [(ngModel)]="machine.location"
+            name="location"
+            type="text"
+            required
+            class="form-input"
+            placeholder="Wprowadź lokalizację"
+          />
+        </div>
+  
+        <div class="form-group">
+          <label for="description">Opis:</label>
+          <textarea
+            id="description"
+            [(ngModel)]="machine.description"
+            name="description"
+            required
+            class="form-textarea"
+          ></textarea>
+        </div>
+  
+        <button type="submit" class="submit-button">Dodaj Maszynę</button>
+      </form>
+    </div>
+  </div>
+  

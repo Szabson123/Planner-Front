@@ -14,13 +14,12 @@
           <i class="fas fa-calendar-alt"></i> Planner
         </a>
       </li>
-      <li><a routerLink="/plan">Home</a></li>
       <li><a routerLink="/free_days"> Dodaj Urlop</a></li>
+      <li><a routerLink="/add-holyday"> Dodaj Święto</a></li>
       <!-- <li><a routerLink="/availability"><i class="fas fa-check-circle"></i> Dodaj Dostępność</a></li>
       <li><a routerLink="/shifts"><i class="fas fa-tasks"></i> Stwórz nową zmianę</a></li> -->
       <li><a routerLink="/machines"> Maszyny</a></li>
-      <li><a routerLink="/add-holyday"> Dodaj Święto</a></li>
-
+      <li><a routerLink="/review">Przeglądy</a></li>
       <!-- Warunkowe wyświetlanie linków -->
       <ng-container *ngIf="isLoggedIn$ | async; else loggedOut">
         <li class="welcome"><a href="#"><i class="fas fa-user"></i> Witaj, {{ userName$ | async }}</a></li>
