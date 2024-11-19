@@ -8,6 +8,7 @@ export interface Review {
   date: string;
   description: string;
   done: boolean;
+  machine_id: number;
 }
 
 @Injectable({
@@ -19,24 +20,25 @@ export class ReviewService {
   constructor(private http: HttpClient) { }
 
   getReviews(machineId: number): Observable<Review[]> {
-    return this.http.get<Review[]>(`http://127.0.0.1:8000/machines/${machineId}/reviews/`);
+    return this.http.get<Review[]>(`${this.apiUrl}${machineId}/reviews/`);
   }
 
   addReview(machineId: number, review: Partial<Review>): Observable<Review> {
-    return this.http.post<Review>(`http://127.0.0.1:8000/machines/${machineId}/reviews/`, review);
+    return this.http.post<Review>(`${this.apiUrl}${machineId}/reviews/`, review);
   }
 
   updateReview(id: number, review: Partial<Review>): Observable<Review> {
     return this.http.put<Review>(`${this.apiUrl}${id}/`, review);
   }
 
-  toggleReviewDone(id: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}${id}/change_to_true_false/`, {});
+  toggleReviewDone(machineId: number, reviewId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}${machineId}/reviews/${reviewId}/change_to_true_false/`, {});
   }
 
-  deleteReview(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}${id}/`);
+  deleteReview(machineId: number, reviewId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}${machineId}/reviews/${reviewId}/`);
   }
+
   getallReviews(): Observable<Review[]> {
     return this.http.get<Review[]>(`http://127.0.0.1:8000/machines/reviews/all/`);
   }

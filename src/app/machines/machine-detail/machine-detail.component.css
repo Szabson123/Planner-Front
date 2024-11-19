@@ -1,146 +1,233 @@
 /* Stylizacja kontenera głównego */
 .detail-container {
-    max-width: 1200px; /* Maksymalna szerokość kontenera */
-    margin: 0 auto; /* Wyśrodkowanie kontenera */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Tytuł sekcji */
+.detail-title,
+.section-title,
+.section-subtitle {
+  text-align: center;
+  color: #333;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.detail-title {
+  font-size: 2.5em;
+}
+
+.section-title {
+  font-size: 1.5em;
+}
+
+.section-subtitle {
+  font-size: 1.3em;
+}
+
+/* Karta szczegółów maszyny */
+.machine-detail-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Sekcja informacji o maszynie */
+.machine-info {
+  text-align: center;
+}
+
+.machine-name {
+  font-size: 2em;
+  color: #4CAF50;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.machine-location,
+.machine-description {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Sekcja recenzji */
+.review-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.reviews-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.review-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.review-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.review-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.review-date {
+  color: #777;
+  margin-right: 10px;
+}
+
+.no-reviews p {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+
+/* Sekcja dodawania recenzji */
+.add-review-section {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-input,
+.form-textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Stylizacja przycisku dodawania recenzji */
+.submit-button,
+.toggle-button,
+.delete-button {
+  display: flex;
+  align-items: center;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.submit-button {
+  background-color: #008CBA;
+}
+
+.submit-button:hover {
+  background-color: #007bb5;
+}
+
+.toggle-button {
+  background-color: #008CBA;
+}
+
+.toggle-button:hover {
+  background-color: #005f6a;
+  transform: scale(1.05);
+}
+
+.delete-button {
+  background-color: #f44336;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+  transform: scale(1.05);
+}
+
+/* Kontener przycisków akcji */
+.review-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.review-actions i {
+  margin-right: 5px;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+  .machine-detail-card {
     padding: 20px;
   }
-  
-  /* Wyśrodkowany tytuł */
-  .detail-title {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2.5em;
-    color: #333;
-  }
-  
-  /* Karta szczegółów maszyny */
-  .machine-detail-card {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  /* Sekcja informacji o maszynie */
-  .machine-info {
-    text-align: center;
-  }
-  
+
   .machine-name {
-    font-size: 2em;
-    color: #4CAF50; /* Zielony kolor dla nazwy maszyny */
-    margin-bottom: 10px;
-    margin-top: 5px;
+    font-size: 1.8em;
   }
-  
-  .machine-location,
-  .machine-description {
-    font-size: 1.1em;
-    color: #555;
-    margin-bottom: 10px;
-  }
-  
-  /* Sekcja recenzji */
-  .reviews-section {
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-  }
-  
-  .section-title {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 15px;
-    margin-top: 10px;
-  }
-  
-  /* Sekcja dodawania recenzji */
-  .add-review-section {
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-  }
-  
+
+  .section-title,
   .section-subtitle {
     font-size: 1.3em;
-    color: #333;
-    margin-bottom: 15px;
-    margin-top: 10px;
+  }
 
-  }
-  
-  /* Stylizacja formularza */
-  .review-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-group label {
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-  }
-  
   .form-input,
   .form-textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
+    font-size: 0.9em;
   }
-  
-  .form-input:focus,
-  .form-textarea:focus {
-    border-color: #4CAF50;
-    outline: none;
-  }
-  
-  /* Stylizacja przycisku dodawania recenzji */
+
   .submit-button {
-    align-self: flex-start;
-    background-color: #008CBA; /* Niebieski kolor */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    padding: 8px 16px;
   }
-  
-  .submit-button:hover {
-    background-color: #007bb5;
-  }
-  
-  /* Responsywność */
-  @media (max-width: 768px) {
-    .machine-detail-card {
-      padding: 20px;
-    }
-  
-    .machine-name {
-      font-size: 1.8em;
-    }
-  
-    .section-title,
-    .section-subtitle {
-      font-size: 1.3em;
-    }
-  
-    .form-input,
-    .form-textarea {
-      font-size: 0.9em;
-    }
-  
-    .submit-button {
-      padding: 8px 16px;
-    }
-  }
-  
+}
+.review-status {
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.status-done {
+  color: #4CAF50; /* Zielony dla wykonanych */
+  background-color: #d4edda;
+}
+
+.status-not-done {
+  color: #f44336; /* Czerwony dla niewykonanych */
+  background-color: #f8d7da;
+}

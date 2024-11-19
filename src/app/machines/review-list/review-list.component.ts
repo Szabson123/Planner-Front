@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+// review-list.component.ts
+
+import { Component, OnInit } from '@angular/core';
 import { ReviewService, Review } from '../../service/review.service'; 
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +12,6 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule]
 })
 export class ReviewListComponent implements OnInit {
-  @Input() machineId!: number;
   reviews: Review[] = [];
 
   constructor(private reviewService: ReviewService) { }
@@ -22,18 +23,31 @@ export class ReviewListComponent implements OnInit {
   loadReviews(): void {
     this.reviewService.getallReviews().subscribe(data => {
       this.reviews = data;
+      this.sortReviews(); // Sortowanie recenzji po załadowaniu
+    }, error => {
+      console.error('Błąd podczas pobierania wszystkich przeglądów', error);
     });
+  }
+
+  sortReviews(): void {
+    this.reviews.sort((a, b) => Number(a.done) - Number(b.done));
   }
 
   toggleDone(review: Review): void {
-    this.reviewService.toggleReviewDone(review.id).subscribe(() => {
-      review.done = !review.done;
+    this.reviewService.toggleReviewDone(review.machine_id, review.id).subscribe(() => {
+      this.loadReviews(); // Odświeżenie listy po zmianie statusu
+    }, error => {
+      console.error('Błąd podczas zmiany statusu przeglądu', error);
     });
   }
 
-  deleteReview(id: number): void {
-    this.reviewService.deleteReview(id).subscribe(() => {
-      this.reviews = this.reviews.filter(review => review.id !== id);
-    });
+  deleteReview(review: Review): void {
+    if (confirm('Czy na pewno chcesz usunąć ten przegląd?')) {
+      this.reviewService.deleteReview(review.machine_id, review.id).subscribe(() => {
+        this.loadReviews(); // Odświeżenie listy po usunięciu
+      }, error => {
+        console.error('Błąd podczas usuwania przeglądu', error);
+      });
+    }
   }
 }
