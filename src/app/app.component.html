@@ -20,6 +20,7 @@
       <li><a routerLink="/shifts"><i class="fas fa-tasks"></i> Stwórz nową zmianę</a></li> -->
       <li><a routerLink="/machines"> Maszyny</a></li>
       <li><a routerLink="/review">Przeglądy</a></li>
+      <li><a routerLink="/workers">Pracownicy</a></li>
       <!-- Warunkowe wyświetlanie linków -->
       <ng-container *ngIf="isLoggedIn$ | async; else loggedOut">
         <li class="welcome"><a href="#"><i class="fas fa-user"></i> Witaj, {{ userName$ | async }}</a></li>

@@ -1,0 +1,17 @@
+<div class="reports-section">
+    <h2 class="section-title">Raporty użytkownika {{ userName }}</h2>
+    <ul class="report-list">
+      <li *ngFor="let report of reports" class="report-item">
+        <div class="report-header">
+          <span class="report-date"><strong>Data:</strong> {{ report.date }}</span>
+        </div>
+        <div class="report-body">
+          <p><strong>Treść:</strong> {{ report.text }}</p>
+        </div>
+      </li>
+      <li *ngIf="reports.length === 0" class="no-reports">
+        <p>Brak raportów do wyświetlenia.</p>
+      </li>
+    </ul>
+  </div>
+  

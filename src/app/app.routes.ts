@@ -12,6 +12,8 @@ import { MachineAddComponent } from './machines/machine-add/machine-add.componen
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 import { MachineListComponent } from './machines/machine-list/machine-list.component';
 import { ReviewListComponent } from './machines/review-list/review-list.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { UserReportsComponent } from './user-reports/user-reports.component';
 
 export const routes: Routes = [
   {
@@ -36,6 +38,10 @@ export const routes: Routes = [
     path: 'free_days', 
     component: FreeDaysComponent
   },
+  
+  { path: 'workers', component: UserListComponent},
+  { path: 'users/:userId/reports', component: UserReportsComponent },
+  
 
   { 
     path: 'shifts', 

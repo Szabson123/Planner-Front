@@ -1,0 +1,14 @@
+<div class="user-list-section">
+    <h2 class="section-title">Lista Użytkowników</h2>
+    <ul class="user-list">
+      <li *ngFor="let user of users" class="user-item">
+        <p><strong>Imię i Nazwisko:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Czy zmiana centralna:</strong> {{ user.is_central ? 'Tak' : 'Nie' }}</p>
+        <button (click)="viewReports(user.id)" class="report-button">Zobacz Raporty</button>
+      </li>
+      <li *ngIf="users.length === 0" class="no-users">
+        <p>Brak użytkowników do wyświetlenia.</p>
+      </li>
+    </ul>
+</div>
