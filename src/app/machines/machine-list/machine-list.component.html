@@ -5,7 +5,7 @@
       <div class="machine-card" *ngFor="let machine of machines">
         <h3>{{ machine.name }}</h3>
         <p><strong>Lokalizacja:</strong> {{ machine.location }}</p>
-        <p>{{ machine.description }}</p>
+        <p>{{ machine.description | truncate:50 }}</p>
         <button class="details-button" (click)="viewMachine(machine.id)">Szczegóły</button>
       </div>
     </div>

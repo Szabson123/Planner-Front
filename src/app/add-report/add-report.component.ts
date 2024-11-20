@@ -10,9 +10,7 @@ import { QuillModule } from 'ngx-quill';
 import * as Quill from 'quill';
 
 // Rejestracja niestandardowych rozmiarów czcionek
-const SizeStyle = Quill.import('attributors/style/size');
-SizeStyle.whitelist = ['8px', '12px', '16px', '20px', '24px', '32px'];
-Quill.register(SizeStyle, true);
+
 
 @Component({
   selector: 'app-add-report',

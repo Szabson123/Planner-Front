@@ -1,5 +1,3 @@
-// src/app/pipes/safe-html.pipe.ts
-
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 

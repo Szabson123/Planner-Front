@@ -9,12 +9,12 @@
           placeholder="Wpisz treść raportu..."
           class="quill-editor" ></quill-editor>
         <div *ngIf="raportForm.get('text')?.invalid && raportForm.get('text')?.touched" class="error">
-          Tekst raportu jest wymagany i musi mieć co najmniej 10 znaków.
+          Tekst raportu jest wymagana
         </div>
       </div>
   
       <div class="form-group">
-        <label for="images">Dodaj Zdjęcia (opcjonalnie):</label>
+        <label for="images">Dodaj zdjęcie Awari (opcjonalne)</label>
         <input type="file" id="images" (change)="onFileChange($event)" multiple accept="image/*">
       </div>
   
