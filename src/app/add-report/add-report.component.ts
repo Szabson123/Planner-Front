@@ -1,16 +1,15 @@
-// src/app/add-report/add-report.component.ts
-
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ReportsService, Report } from '../service/report.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { QuillModule } from 'ngx-quill'; // Import QuillModule
 
 @Component({
   selector: 'app-add-report',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, QuillModule], // Dodaj QuillModule
   templateUrl: './add-report.component.html',
   styleUrls: ['./add-report.component.css']
 })
@@ -20,6 +19,13 @@ export class AddReportComponent {
   previewImages: string[] = [];
   uploadProgress: number = 0;
   uploadError: string = '';
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }], 
+      ['link', 'image']                      
+    ]
+  };
 
   constructor(
     private raportService: ReportsService,

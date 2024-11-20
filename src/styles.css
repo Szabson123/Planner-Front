@@ -1,3 +1,6 @@
+@import "quill/dist/quill.core.css";
+@import "quill/dist/quill.snow.css";
+
 :root {
     --primary-blue: #1e90ff;
     --secondary-blue: #63b3ed;

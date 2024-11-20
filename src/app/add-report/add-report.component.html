@@ -5,7 +5,11 @@
     <form [formGroup]="raportForm" (ngSubmit)="submitRaport()">
       <div class="form-group">
         <label for="text">Tekst Raportu:</label>
-        <textarea id="text" formControlName="text" required></textarea>
+        <quill-editor
+          formControlName="text"
+          [modules]="quillModules"
+          placeholder="Wpisz treść raportu..."
+        ></quill-editor>
         <div *ngIf="raportForm.get('text')?.invalid && raportForm.get('text')?.touched" class="error">
           Tekst raportu jest wymagany.
         </div>

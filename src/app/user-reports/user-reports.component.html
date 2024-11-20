@@ -6,13 +6,13 @@
       <li *ngFor="let report of reports" class="report-item">
         <div class="report-header">
           <span class="report-date"><strong>Data:</strong> {{ report.date }}</span>
-          <!-- Ikona obrazu, jeśli obrazy są dostępne -->
           <span *ngIf="report.images.length > 0" class="image-icon" (click)="openImage(report.images[0].img)">
             📷
           </span>
         </div>
         <div class="report-body">
-          <p><strong>Treść:</strong> {{ report.text }}</p>
+          <p><strong>Treść:</strong></p>
+          <div [innerHTML]="report.text | safeHtml"></div> <!-- Użyj [innerHTML] z pipe'em -->
         </div>
       </li>
       <li *ngIf="reports.length === 0" class="no-reports">

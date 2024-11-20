@@ -1,13 +1,17 @@
+// src/app/user-reports/user-reports.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReportsService, Report } from '../service/report.service';
 import { CommonModule } from '@angular/common'; 
 import { UsersService, User } from '../service/users.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
 
 @Component({
   selector: 'app-user-reports',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SafeHtmlPipe], // Dodaj SafeHtmlPipe do imports
   templateUrl: './user-reports.component.html',
   styleUrls: ['./user-reports.component.css']
 })
@@ -16,12 +20,13 @@ export class UserReportsComponent implements OnInit {
   reports: Report[] = [];
   userName: string = 'Ładowanie...'; 
   selectedImage: string | null = null; 
-  isModalOpen: boolean = false; // Nowa właściwość do zarządzania modalem
+  isModalOpen: boolean = false; 
 
   constructor(
     private route: ActivatedRoute,
     private reportsService: ReportsService,
     private usersService: UsersService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
