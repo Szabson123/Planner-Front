@@ -30,4 +30,15 @@
     font-style: italic;
     color: #777;
   }
-  
+
+.buttons-l{
+    padding: 10px 20px;
+    background-color: var(--primary-blue);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: var(--font-primary);
+    font-size: 1em;
+}

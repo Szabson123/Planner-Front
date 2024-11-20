@@ -9,12 +9,12 @@ export interface Report {
   text: string;
   user: number;
   user_name: string;
-  images?: RaportImg[];
+  images: RaportImg[];
 }
 
 export interface RaportImg {
   id?: number;
-  img: File | string;
+  img: string;
 }
 
 @Injectable({

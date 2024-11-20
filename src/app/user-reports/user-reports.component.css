@@ -106,4 +106,51 @@
       font-size: 0.95em;
     }
   }
+  .modal {
+    display: flex; /* Użyj flexbox do centrowania modalu */
+    position: fixed; /* Pozostaje w miejscu */
+    z-index: 1000; /* Na wierzchu */
+    left: 0;
+    top: 0;
+    width: 100%; /* Pełna szerokość */
+    height: 100%; /* Pełna wysokość */
+    overflow: auto; /* Włącz przewijanie, jeśli potrzebne */
+    background-color: rgba(0, 0, 0, 0.5); /* Czarne tło z przezroczystością */
+    justify-content: center; /* Centruj poziomo */
+    align-items: center; /* Centruj pionowo */
+  }
   
+  /* Zawartość Modalu */
+  .modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+  }
+  
+  /* Przycisk Zamknięcia */
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-button:hover,
+  .close-button:focus {
+    color: black;
+    text-decoration: none;
+  }
+  
+  /* Obraz w Modalu */
+  .modal-image {
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    margin: 0 auto;
+  }

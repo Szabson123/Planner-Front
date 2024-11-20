@@ -1,9 +1,15 @@
+<!-- src/app/user-reports/user-reports.component.html -->
+
 <div class="reports-section">
     <h2 class="section-title">Raporty użytkownika {{ userName }}</h2>
     <ul class="report-list">
       <li *ngFor="let report of reports" class="report-item">
         <div class="report-header">
           <span class="report-date"><strong>Data:</strong> {{ report.date }}</span>
+          <!-- Ikona obrazu, jeśli obrazy są dostępne -->
+          <span *ngIf="report.images.length > 0" class="image-icon" (click)="openImage(report.images[0].img)">
+            📷
+          </span>
         </div>
         <div class="report-body">
           <p><strong>Treść:</strong> {{ report.text }}</p>
@@ -13,5 +19,13 @@
         <p>Brak raportów do wyświetlenia.</p>
       </li>
     </ul>
+  </div>
+  
+  <!-- Struktura Modalu -->
+  <div class="modal" *ngIf="isModalOpen" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <span class="close-button" (click)="closeModal()">&times;</span>
+      <img [src]="selectedImage" alt="Selected Image" class="modal-image">
+    </div>
   </div>
   

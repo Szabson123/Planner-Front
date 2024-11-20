@@ -14,7 +14,9 @@ import { UsersService, User } from '../service/users.service';
 export class UserReportsComponent implements OnInit {
   userId!: number;
   reports: Report[] = [];
-  userName: string = 'Ładowanie...'; // Domyślny tekst podczas ładowania
+  userName: string = 'Ładowanie...'; 
+  selectedImage: string | null = null; 
+  isModalOpen: boolean = false; // Nowa właściwość do zarządzania modalem
 
   constructor(
     private route: ActivatedRoute,
@@ -49,12 +51,27 @@ export class UserReportsComponent implements OnInit {
   loadReports(): void {
     this.reportsService.getReportsByUser(this.userId).subscribe(
       data => {
-        console.log('Otrzymane raporty:', data);
-        this.reports = data;
+        this.reports = data.map(report => ({
+          ...report,
+          images: report.images?.map(image => ({
+            ...image,
+            img: String(image.img),
+          })) || [], // Upewnia się, że images jest zawsze tablicą
+        }));
       },
       error => {
         console.error('Błąd podczas pobierania raportów', error);
       }
     );
+  }
+
+  openImage(imageUrl: string): void {
+    this.selectedImage = imageUrl;
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.selectedImage = null;
+    this.isModalOpen = false;
   }
 }
