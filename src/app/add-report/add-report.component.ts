@@ -4,12 +4,20 @@ import { ReportsService, Report } from '../service/report.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
-import { QuillModule } from 'ngx-quill'; // Import QuillModule
+import { QuillModule } from 'ngx-quill';
+
+// Import Quill
+import * as Quill from 'quill';
+
+// Rejestracja niestandardowych rozmiarów czcionek
+const SizeStyle = Quill.import('attributors/style/size');
+SizeStyle.whitelist = ['8px', '12px', '16px', '20px', '24px', '32px'];
+Quill.register(SizeStyle, true);
 
 @Component({
   selector: 'app-add-report',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, QuillModule], // Dodaj QuillModule
+  imports: [CommonModule, ReactiveFormsModule, QuillModule],
   templateUrl: './add-report.component.html',
   styleUrls: ['./add-report.component.css']
 })
@@ -19,11 +27,15 @@ export class AddReportComponent {
   previewImages: string[] = [];
   uploadProgress: number = 0;
   uploadError: string = '';
+  
   quillModules = {
     toolbar: [
       ['bold', 'italic', 'underline'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }], 
-      ['link', 'image']                      
+      [{ 'size': ['8px', '12px', '16px', '20px', '24px', '32px'] }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'], 
+      ['clean'] 
     ]
   };
 
@@ -33,7 +45,7 @@ export class AddReportComponent {
     private router: Router
   ) {
     this.raportForm = this.fb.group({
-      text: ['', Validators.required],
+      text: ['', [Validators.required, Validators.minLength(10)]],
       images: [null]
     });
   }

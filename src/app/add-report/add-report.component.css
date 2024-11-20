@@ -1,85 +1,157 @@
 /* src/app/add-report/add-report.component.css */
 
 .add-report-container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 100%; /* Zwiększ szerokość kontenera do 100% */
+    margin: 0 auto; /* Wyśrodkuj kontener */
     padding: 20px;
-  }
-  
-  .add-report-container h2 {
+    box-sizing: border-box;
+}
+
+.add-report-container h2 {
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
+    font-size: 28px; /* Zwiększ rozmiar nagłówka */
+}
+
+.form-group {
+    margin-bottom: 20px; /* Zwiększ margines dla większego pola */
+}
+
+.form-group label {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .form-group textarea {
-    width: 100%;
-    height: 100px;
-    padding: 8px;
-    resize: vertical;
-  }
-  
-  .form-group input[type="file"] {
+    margin-bottom: 10px;
+    font-size: 16px; /* Zwiększ rozmiar etykiet */
+}
+
+/* Usunięcie stylów dla textarea, ponieważ używamy Quill */
+.form-group textarea {
+    display: none;
+}
+
+.form-group input[type="file"] {
     display: block;
-  }
-  
-  .image-preview {
-    margin-top: 15px;
-  }
-  
-  .preview-img {
+}
+
+.image-preview {
+    margin-top: 20px;
+}
+
+.preview-img {
     display: inline-block;
-    margin-right: 10px;
-  }
-  
-  .preview-img img {
+    margin-right: 15px;
+}
+
+.preview-img img {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
-  }
-  
-  button {
-    padding: 10px 20px;
+    max-width: 150px; /* Zwiększ rozmiar podglądu obrazów */
+}
+
+button {
+    padding: 12px 24px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
-  
-  button:disabled {
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
     background-color: #a0c4ff;
     cursor: not-allowed;
-  }
-  
-  .error {
+}
+
+.error {
     color: red;
     font-size: 14px;
     margin-top: 5px;
-  }
-  
-  /* Stylizacja paska postępu */
-  .progress {
+}
+
+/* Stylizacja paska postępu */
+.progress {
     width: 100%;
     background-color: #f3f3f3;
     border-radius: 4px;
-    margin-top: 15px;
-  }
-  
-  .progress-bar {
-    height: 20px;
+    margin-top: 20px;
+}
+
+.progress-bar {
+    height: 25px; /* Zwiększ wysokość paska */
     background-color: #4caf50;
     text-align: center;
     color: white;
     border-radius: 4px;
-  }
-  
+    line-height: 25px; /* Wyrównanie tekstu w pionie */
+    font-weight: bold;
+}
+
+/* Definiowanie niestandardowych rozmiarów czcionki */
+.ql-size-8px { font-size: 8px; }
+.ql-size-12px { font-size: 12px; }
+.ql-size-16px { font-size: 16px; }
+.ql-size-20px { font-size: 20px; }
+.ql-size-24px { font-size: 24px; }
+.ql-size-32px { font-size: 32px; }
+
+/* Upewnij się, że Quill stosuje te style */
+.ql-editor {
+    font-family: Arial, sans-serif; /* Przykładowa czcionka */
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .quill-editor {
+        height: 300px; /* Zmniejsz wysokość na mniejszych ekranach */
+    }
+
+    .preview-img img {
+        max-width: 100px; /* Zmniejsz rozmiar obrazów na podgląd */
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+.add-report-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.add-report-container h2 {
+    text-align: center;
+    margin: 0 auto 20px auto;
+    font-size: 28px;
+    max-width: 800px;
+}
+
+.quill-editor {
+    width: 100%;
+    height: 400px;
+}
+
+@media (max-width: 768px) {
+    .add-report-container {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .quill-editor {
+        height: 300px;
+    }
+
+    .add-report-container h2 {
+        font-size: 24px;
+    }
+}

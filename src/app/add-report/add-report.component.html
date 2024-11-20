@@ -1,5 +1,3 @@
-<!-- src/app/add-report/add-report.component.html -->
-
 <div class="add-report-container">
     <h2>Dodaj Raport</h2>
     <form [formGroup]="raportForm" (ngSubmit)="submitRaport()">
@@ -9,9 +7,9 @@
           formControlName="text"
           [modules]="quillModules"
           placeholder="Wpisz treść raportu..."
-        ></quill-editor>
+          class="quill-editor" ></quill-editor>
         <div *ngIf="raportForm.get('text')?.invalid && raportForm.get('text')?.touched" class="error">
-          Tekst raportu jest wymagany.
+          Tekst raportu jest wymagany i musi mieć co najmniej 10 znaków.
         </div>
       </div>
   
@@ -24,7 +22,7 @@
       <div *ngIf="previewImages.length > 0" class="image-preview">
         <h4>Podgląd Wybranych Obrazów:</h4>
         <div *ngFor="let img of previewImages" class="preview-img">
-          <img [src]="img" alt="Podgląd obrazu" width="100">
+          <img [src]="img" alt="Podgląd obrazu" width="150">
         </div>
       </div>
   
@@ -42,4 +40,3 @@
       {{ uploadError }}
     </div>
   </div>
-  
