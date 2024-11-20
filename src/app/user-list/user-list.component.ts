@@ -29,4 +29,8 @@ export class UserListComponent implements OnInit {
   viewReports(userId: number): void {
     this.router.navigate([`/users/${userId}/reports`]);
   }
+  
+  navigateToAddReport(): void {
+    this.router.navigate(['/add-report']);
+  }
 }

@@ -1,0 +1,41 @@
+<!-- src/app/add-report/add-report.component.html -->
+
+<div class="add-report-container">
+    <h2>Dodaj Raport</h2>
+    <form [formGroup]="raportForm" (ngSubmit)="submitRaport()">
+      <div class="form-group">
+        <label for="text">Tekst Raportu:</label>
+        <textarea id="text" formControlName="text" required></textarea>
+        <div *ngIf="raportForm.get('text')?.invalid && raportForm.get('text')?.touched" class="error">
+          Tekst raportu jest wymagany.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="images">Dodaj Zdjęcia (opcjonalnie):</label>
+        <input type="file" id="images" (change)="onFileChange($event)" multiple accept="image/*">
+      </div>
+  
+      <!-- Podgląd obrazów -->
+      <div *ngIf="previewImages.length > 0" class="image-preview">
+        <h4>Podgląd Wybranych Obrazów:</h4>
+        <div *ngFor="let img of previewImages" class="preview-img">
+          <img [src]="img" alt="Podgląd obrazu" width="100">
+        </div>
+      </div>
+  
+      <!-- Pasek postępu uploadu -->
+      <div *ngIf="uploadProgress > 0 && uploadProgress < 100" class="progress">
+        <div class="progress-bar" role="progressbar" [style.width.%]="uploadProgress">
+          {{ uploadProgress }}%
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="raportForm.invalid">Dodaj Raport</button>
+    </form>
+  
+    <div *ngIf="uploadError" class="error">
+      {{ uploadError }}
+    </div>
+  </div>
+  

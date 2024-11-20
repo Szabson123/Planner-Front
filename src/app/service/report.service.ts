@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse, HttpEvent } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -21,16 +21,16 @@ export interface RaportImg {
   providedIn: 'root'
 })
 export class ReportsService {
-  private apiUrl = "http://127.0.0.1:8000/raport/raports";
+  private apiUrl = "http://127.0.0.1:8000/raport/raports/";
 
   constructor(private http: HttpClient) {}
 
   getReportsByUser(userId: number): Observable<Report[]> {
     const params = new HttpParams().set('user', userId.toString());
-    return this.http.get<Report[]>(`${this.apiUrl}/`, { params });
+    return this.http.get<Report[]>(`${this.apiUrl}`, { params });
   }
 
-  addRaport(text: string, images: File[]): Observable<Report> {
+  addRaport(text: string, images: File[]): Observable<HttpEvent<Report>> {
     const formData: FormData = new FormData();
     formData.append('text', text);
 
@@ -38,12 +38,13 @@ export class ReportsService {
       formData.append('images', image, image.name);
     });
 
-    return this.http.post<Report>(this.apiUrl, formData)
-      .pipe(
-        catchError(this.handleError)
-      );
+    return this.http.post<Report>(this.apiUrl, formData, {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(
+      catchError(this.handleError)
+    );
   }
-
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Nieznany błąd!';

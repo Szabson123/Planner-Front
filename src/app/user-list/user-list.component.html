@@ -1,5 +1,8 @@
 <div class="user-list-section">
     <h2 class="section-title">Lista Użytkowników</h2>
+    <div class="add-report-button">
+        <button (click)="navigateToAddReport()" class="add-report-btn">Dodaj Raport</button>
+    </div>
     <ul class="user-list">
       <li *ngFor="let user of users" class="user-item">
         <p><strong>Imię i Nazwisko:</strong> {{ user.first_name }} {{ user.last_name }}</p>

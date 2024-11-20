@@ -14,6 +14,7 @@ import { MachineListComponent } from './machines/machine-list/machine-list.compo
 import { ReviewListComponent } from './machines/review-list/review-list.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserReportsComponent } from './user-reports/user-reports.component';
+import { AddReportComponent } from './add-report/add-report.component';
 
 export const routes: Routes = [
   {
@@ -38,10 +39,10 @@ export const routes: Routes = [
     path: 'free_days', 
     component: FreeDaysComponent
   },
-  
+
   { path: 'workers', component: UserListComponent},
   { path: 'users/:userId/reports', component: UserReportsComponent },
-  
+  { path: 'add-report', component: AddReportComponent },
 
   { 
     path: 'shifts', 
